@@ -4,9 +4,19 @@
 
 <mapper namespace="com.miniproject2.mapper.ItemMapper">
 
-    <select id="itemList" resultMap="itemResultMap" resultType="com.miniproject2.study.domain.ItemList">
-        SELECT * FROM itemlist
+    <select id="itemList" resultMap="itemResultMap" resultType="ItemList">
+        SELECT * FROM itemlist ORDER BY CAST(SUBSTRING(item_num, 5) AS UNSIGNED) DESC
     </select>
+    
+    <select id="getList" resultMap="itemResultMap"  resultType="ItemList">
+    	select * from itemlist where #{itemNum}
+    </select>
+    
+    <insert id="insertList" parameterType="ItemList"
+		useGeneratedKeys="true" keyProperty="itemNum">
+    	insert into itemlist ( item_name, item_producer, item_content, item_price, item_file,item_date) 
+    	values (#{itemName},#{itemProducer},#{itemContent},#{itemPrice},#{itemFile},SYSDATE())
+    </insert>
 
     <resultMap id="itemResultMap" type="com.miniproject2.study.domain.ItemList">
         <id property="itemNum" column="item_num"/>

@@ -1,50 +1,15 @@
 $(function() {
-	var carouselWrap = $('#carousel-example-generic'),
-		 typedTxtArr = [
-			'First Carousel Text',
-			'Second Carousel Text',
-			'Third Carousel Text'
-		 ],
-		 typed, typedObj;	
-
-	var typedFunc = function( a, b ) {
-		typed = new Typed(a[0], {
-			strings: [
-				typedTxtArr[ b ]
-			],
-			stringsElement: null,
-			typeSpeed: 70,
-			startDelay: 1000,
-			smartBackspace: false,
-			backSpeed: 60,
-			backDelay: 5000,
-			loop: true,
-			loopCount: 5,
-			showCursor: false,
-			cursorChar: "|",
-			attr: null,
-			contentType: 'html',
-			callback: function() {},
-			preStringTyped: function() {},
-			onStringTyped: function() {
-				setTimeout(function(){
-					carouselWrap.carousel('next');
-				}, 1000);
-			},
-			resetCallback: function() {},
-			onReset: function(self) { 
-				
-			}
-		});
-	}
-
-	carouselWrap.on('slid.bs.carousel', function () {
-		var idx =$(this).find('.active').index(),
-			 typedObj = $('.typing').eq( idx );
-			 typed.destroy();
-			 typedFunc( typedObj, idx );
-	});
+	const content = "First served에 오신것을 환영합니다. \n 보다 안전한 거래가 되도록 노력하겠습니다.";
+	const text = document.querySelector(".text");
+	let i = 0;
 	
-	// init
-	typedFunc( $('.typing').eq(0), 0); 
+	function typing(){
+	    let txt = content[i++];
+	    text.innerHTML += txt === "\n" ? "<br/>" : txt;
+	    if (i < content.length) {
+	        setTimeout(typing, 80); // Schedule the next character typing
+	    }
+	}
+	
+	typing(); // Start the typing effect
 });

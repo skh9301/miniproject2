@@ -26,26 +26,25 @@ public class ItemListDaoImpl implements ItemListDao{
 
 	@Override
 	public ItemList getList(String itemNum) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectOne(NAME_SPACE+".getList",itemNum);
 	}
 
 	@Override
-	public void insertList(ItemList itemlist) {
-		// TODO Auto-generated method stub
+	public void insertList(ItemList itemList) {
+		sqlSession.insert(NAME_SPACE+".insertList",itemList);
 		
 	}
 
 	@Override
 	public void updateList(ItemList itemlist) {
-		// TODO Auto-generated method stub
+		sqlSession.update(NAME_SPACE+".updateList",itemlist);
 		
 	}
 
 	@Override
 	public void deleteList(String itemNum) {
-		// TODO Auto-generated method stub
-		
+		sqlSession.delete(NAME_SPACE+".deleteList",itemNum);
 	}
 
 }

@@ -1,57 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- header  -->
-<div class="row border-bottom border-primary" id="global-header">
-	<div class="col-4">
-		<p><img src="https://via.placeholder.com/200x100"></p>
-	</div>
-	<div class="col-8">
-		<div class="row mt-1">
-			<div class="col">
-				<ul class="nav justify-content-end">
-					<li class="nav-item">
-						<a class="nav-link" 
-							href='${ sessionScope.isLogin ? "logout" : "loginForm" }'>
-							${ sessionScope.isLogin ? "로그아웃" : "로그인-폼" }
-						</a>						
-					</li>
-					<li class="nav-item">
-						<a class="nav-link " 
-							${ not sessionScope.isLogin ? "data-bs-toggle='modal' data-bs-target='#loginModal'" : ""}
-							href='${ sessionScope.isLogin ? "logout" : "#" }'>
-							${ sessionScope.isLogin ? "로그아웃" : "로그인-모달" }
-						</a>						
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="boardList">게시 글 리스트</a>
-					</li>
-					<li class="nav-item">						
-						<c:if test="${ not sessionScope.isLogin }" >	
-							<a class="nav-link" href="#">회원가입</a>
-						</c:if>
-						<c:if test="${ sessionScope.isLogin }" >
-							<a class="nav-link" href="#">정보수정</a>
-						</c:if>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">주문/배송조회</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">고객센터</a>
-					</li>
-				</ul>
-			</div>
+<div class="row border-bottom border-primary align-item-center" id="global-header">
+	<div class= "row d-flex align-items-center my-2">
+		<div class="col-3" >
+			<p>
+			<a href="main">
+				<img src="resources/images/로고최종a.png"
+					style="height: 80px; width: 240px">
+			</a>
+			</p>
 		</div>
-		<div class="row">
-			<div class="col text-end">&nbsp;</div>
+		<div class="col-1 ">
+			<a class="nav-link " href="#" style="font-size:25px;">거래소</a>
 		</div>
-		<div class="row">
-			<div class="col text-end pe-5 text-primary">
-				<c:if test="${ sessionScope.isLogin }" >
-					<div>안녕하세요 ${ sessionScope.member.name }님</div>
-				</c:if>
-			</div>
+		<div class="col-2 mx-3">
+			<a class="nav-link " href="itemList" style="font-size:25px;">물품리스트</a>
+		</div>
+		<div class="col d-flex justify-content-end">
+				<a class="nav-link " href="#" style="font-size:20px;">로그인</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a class="nav-link" href="#" style="font-size:20px;">회원가입</a>
 		</div>
 	</div>
 </div>

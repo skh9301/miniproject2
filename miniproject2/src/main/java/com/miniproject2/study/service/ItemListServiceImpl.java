@@ -22,26 +22,22 @@ public class ItemListServiceImpl implements ItemListService{
 
 	@Override
 	public ItemList getList(String itemNum) {
-		// TODO Auto-generated method stub
-		return null;
+		return itemListDao.getList(itemNum);
 	}
 
 	@Override
 	public void insertList(ItemList itemlist) {
-		// TODO Auto-generated method stub
-		
+		itemListDao.insertList(itemlist);
 	}
 
 	@Override
 	public void updateList(ItemList itemlist) {
-		// TODO Auto-generated method stub
-		
+		itemListDao.updateList(itemlist);
 	}
 
 	@Override
 	public void deleteList(String itemNum) {
-		// TODO Auto-generated method stub
-		
+		itemListDao.deleteList(itemNum);
 	}
 
 }
