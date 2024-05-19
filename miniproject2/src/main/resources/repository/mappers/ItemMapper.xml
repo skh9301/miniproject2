@@ -7,7 +7,7 @@
      <select id="itemList" resultMap="itemResultMap" resultType="ItemList">
         SELECT * FROM itemlist
     </select>
-    
+     
      <select id="getList" resultMap="itemResultMap"  resultType="ItemList">
     	select * from itemlist where #{itemNum}
     </select>
