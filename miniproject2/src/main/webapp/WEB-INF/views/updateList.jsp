@@ -49,7 +49,7 @@
 	    	 <input type="file" class="form-control" id="itemFile" style="width:380px;">
 	    </div>
 	    <div class="col-4 d-flex justify-content-around">
-	        <a href="#" class="btn btn-primary">물품등록</a>
+	        <a href="#" class="btn btn-primary">수정하기</a>
 	        <a href="#" class="btn btn-secondary">취소하기</a>
 	    </div>
 	</div>

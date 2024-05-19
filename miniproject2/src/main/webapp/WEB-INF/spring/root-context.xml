@@ -12,15 +12,15 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath:repository/mappers/**/*Mapper.xml"/>
+        <!--  <property name="configLocation" value="classpath:mybatis-config.xml" />-->
         <property name="typeAliasesPackage" value="com.miniproject2.study.domain"/>
     </bean>
 
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
-        <constructor-arg ref="sqlSessionFactory"/>
-    </bean>
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+		c:sqlSessionFactory-ref="sqlSessionFactory" />
 
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+    <bean id="transactionManager"
+			class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+			p:dataSource-ref="dataSource" />
 
 </beans>

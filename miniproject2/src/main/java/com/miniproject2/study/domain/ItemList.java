@@ -1,6 +1,6 @@
 package com.miniproject2.study.domain;
 
-import com.google.protobuf.Timestamp;
+import java.sql.Timestamp;
 
 public class ItemList {
 	String itemNum;
@@ -10,14 +10,14 @@ public class ItemList {
 	int itemPrice;
 	String itemFile;
 	String itemItr;
-	Timestamp itemDate;
+	Timestamp  itemDate;
 	
 	public ItemList() {}
 
 	
 	
 	public ItemList(String itemNum, String itemName, String itemProducer, String itemContent, int itemPrice,
-			String itemFile, String itemItr, Timestamp itemDate) {
+			String itemFile, String itemItr, Timestamp  itemDate) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
@@ -87,11 +87,11 @@ public class ItemList {
 		this.itemItr = itemItr;
 	}
 
-	public Timestamp getItemDate() {
+	public Timestamp  getItemDate() {
 		return itemDate;
 	}
 
-	public void setItemDate(Timestamp itemDate) {
+	public void setItemDate(Timestamp  itemDate) {
 		this.itemDate = itemDate;
 	}
 	

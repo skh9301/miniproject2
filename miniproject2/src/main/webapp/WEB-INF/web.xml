@@ -45,7 +45,6 @@
 		즉 getCharacterEncoding()을 호출해 null이 아니라 하더라도
 		request와 response에 utf-8 문자 셋을 강제로 설정한다.
 		-->
-		- 10 -
 		<init-param>
 		<param-name>forceEncoding</param-name>
 		<param-value>true</param-value>

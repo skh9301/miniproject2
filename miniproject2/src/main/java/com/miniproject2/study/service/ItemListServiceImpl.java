@@ -10,34 +10,34 @@ import com.miniproject2.study.domain.ItemList;
 
 @Service
 public class ItemListServiceImpl implements ItemListService{
-	
+
 	@Autowired
 	private ItemListDao itemListDao;
-	
+
 
 	@Override
 	public List<ItemList> itemList() {
 		return itemListDao.itemList();
 	}
 
-	@Override
-	public ItemList getList(String itemNum) {
-		return itemListDao.getList(itemNum);
-	}
+	@Override 
+	public ItemList getList(String itemNum){
+		return	itemListDao.getList(itemNum); 
+		}
 
-	@Override
+	@Override 
 	public void insertList(ItemList itemlist) {
-		itemListDao.insertList(itemlist);
-	}
+		itemListDao.insertList(itemlist); 
+		}
 
-	@Override
+	@Override 
 	public void updateList(ItemList itemlist) {
-		itemListDao.updateList(itemlist);
-	}
+		itemListDao.updateList(itemlist); 
+		}
 
-	@Override
+	@Override 
 	public void deleteList(String itemNum) {
-		itemListDao.deleteList(itemNum);
-	}
+		itemListDao.deleteList(itemNum); 
+		}
 
 }

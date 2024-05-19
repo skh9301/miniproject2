@@ -13,12 +13,12 @@
 		<table class="table table-hover">
 			<tbody>
 			
-				<c:if test="${empty itemList }">
+				<c:if test="${empty iList }">
 				<tr>
 					<td>현재 게시물은 존재하지 않습니다</td>
 				</tr>
 				</c:if>
-				<c:if test="${not empty itemList }">
+				<c:if test="${not empty iList }">
 				<c:forEach var="iList" items="${iList }">
 				<tr>
 					<td rowspan="5">이미지</td>
@@ -35,8 +35,7 @@
 				</tr>
 				<tr>
 					<td>올린시간: </td>
-					<td><fmt:formatDate value="${iList.itemDate}" 
-									pattern="yyyy-MM-dd HH:mm"/></td>
+					<td></td>
 				</tr>
 				<tr>
 					<td></td>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miniproject2.mapper.ItemMapper">
+
+     <select id="itemList" resultMap="itemResultMap" resultType="ItemList">
+        SELECT * FROM itemlist
+    </select>
+    
+     <select id="getList" resultMap="itemResultMap"  resultType="ItemList">
+    	select * from itemlist where #{itemNum}
+    </select>
+    
+    <insert id="insertList" parameterType="ItemList"
+		useGeneratedKeys="true" keyProperty="itemNum">
+    	insert into itemlist ( item_name, item_producer, item_content, item_price, item_file,item_date) 
+    	values (#{itemName},#{itemProducer},#{itemContent},#{itemPrice},#{itemFile},SYSDATE())
+    </insert> 
+
+    <resultMap id="itemResultMap" type="ItemList">
+	    <id property="itemNum" column="item_num"/>
+	    <result property="itemName" column="item_name"/>
+	    <result property="itemProducer" column="item_producer"/>
+	    <result property="itemContent" column="item_content"/>
+	    <result property="itemPrice" column="item_price"/>
+	    <result property="itemItr" column="item_itr"/>
+	    <result property="itemDate" column="item_date" />
+	    <result property="itemFile" column="item_file"/>
+	</resultMap>
+
+</mapper>

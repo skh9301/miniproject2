@@ -12,4 +12,17 @@ $(function() {
 	}
 	
 	typing(); // Start the typing effect
+	
+	$("#detailUpdate").on("click",function(){
+		$("#checkForm").attr("action","update");
+		$("#checkForm").attr("method","post");
+		$("#checkForm").submin();
+		
+	});
+	$("#detailDelete").on("click",function(){
+		$("#checkForm").attr("action","delete");
+		$("#checkForm").attr("method","post");
+		$("#checkForm").submin();
+		
+	});
 });
