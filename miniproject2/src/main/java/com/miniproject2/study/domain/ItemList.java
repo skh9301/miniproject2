@@ -11,13 +11,14 @@ public class ItemList {
 	String itemFile;
 	String itemItr;
 	Timestamp  itemDate;
+	String memberId;
 	
 	public ItemList() {}
 
 	
 	
 	public ItemList(String itemNum, String itemName, String itemProducer, String itemContent, int itemPrice,
-			String itemFile, String itemItr, Timestamp  itemDate) {
+			String itemFile, String itemItr, Timestamp  itemDate, String memberId) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
@@ -27,6 +28,7 @@ public class ItemList {
 		this.itemFile = itemFile;
 		this.itemItr = itemItr;
 		this.itemDate = itemDate;
+		this. memberId= memberId;
 	}
 
 
@@ -93,6 +95,13 @@ public class ItemList {
 
 	public void setItemDate(Timestamp  itemDate) {
 		this.itemDate = itemDate;
+	}
+	public String  getMemberId() {
+		return memberId;
+	}
+	
+	public void setMemberId(String memberId  ) {
+		this.memberId = memberId;
 	}
 	
 }

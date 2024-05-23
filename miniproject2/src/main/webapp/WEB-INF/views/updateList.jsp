@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+    <form name="updateList" action="updateProcess" id="updateList"  method="post">
+    <input type="hiddin" name="itemNum" value="${itemList.itemNum }">
 <div class="row my-5 justify-content-center">
     <div class="col-4">
         <div class="row">
@@ -14,7 +15,7 @@
             <div class="col">
                 <div class="input-group mb-3">
 				  <span class="input-group-text">물품이름</span>
-				  <input type="text" class="form-control"  name="itemName" aria-label="Amount (to the nearest dollar)">
+				  <input type="text" class="form-control"  name="itemName" aria-label="Amount (to the nearest dollar)" value="${itemList.itemName }">
 				</div>
             </div>
         </div>
@@ -22,7 +23,7 @@
             <div class="col">
                 <div class="input-group mb-3">
 				  <span class="input-group-text" style="width:90px;">브랜드</span>
-				  <input type="text" class="form-control"  name="itemProducer" aria-label="Amount (to the nearest dollar)">
+				  <input type="text" class="form-control"  name="itemProducer" aria-label="Amount (to the nearest dollar)"  value="${itemList.itemProducer }">
 				</div>
             </div>
         </div>
@@ -30,7 +31,7 @@
             <div class="col">
              <div class="input-group" style="height:320px;">
 			  <span class="input-group-text">물품설명</span>
-			  <textarea class="form-control" aria-label="With textarea" name="itemContent" ></textarea>
+			  <textarea class="form-control" aria-label="With textarea" name="itemContent" > ${itemList.itemContent}</textarea>
 			</div>
             </div>
         </div>
@@ -38,7 +39,7 @@
             <div class="col">
                 <div class="input-group mb-3">
 				  <span class="input-group-text">시작가격</span>
-				  <input type="text" class="form-control"  name="itemPriace" aria-label="Amount (to the nearest dollar)">
+				  <input type="text" class="form-control"  name="itemPrice" aria-label="Amount (to the nearest dollar)" value="${itemList.itemPrice}">
 				</div>
             </div>
         </div>
@@ -49,8 +50,10 @@
 	    	 <input type="file" class="form-control" id="itemFile" style="width:380px;">
 	    </div>
 	    <div class="col-4 d-flex justify-content-around">
-	        <a href="#" class="btn btn-primary">수정하기</a>
-	        <a href="#" class="btn btn-secondary">취소하기</a>
+	        <input type="submit" value="수정하기" class="btn btn-primary"/>
+	        <input class="btn btn-primary" type="button" value="목록보기" 
+						onclick="location.href='itemList'"/>	
 	    </div>
 	</div>
 </div>
+</form>

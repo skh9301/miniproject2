@@ -21,9 +21,9 @@
 				<c:if test="${not empty iList }">
 				<c:forEach var="iList" items="${iList }">
 				<tr>
-					<td rowspan="5">이미지</td>
+					<td rowspan="5">${item.itemFile }</td>
 					<td>판매물품 : </td>
-					<td>${iList.itemName }</td>
+					<td><a href="itemDetail?itemNum=${iList.itemNum}">${iList.itemName }</a></td>
 				</tr>
 				<tr>
 					<td>판매가격: </td>

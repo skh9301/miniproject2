@@ -4,19 +4,40 @@
 
 <mapper namespace="com.miniproject2.mapper.ItemMapper">
 
+
+	<!-- 리스트 뽑는 매퍼 -->
      <select id="itemList" resultMap="itemResultMap" resultType="ItemList">
-        SELECT * FROM itemlist
+	SELECT
+	i.*,
+	m.member_nick
+	FROM
+	itemlist i
+	JOIN
+	memberlist m
+	ON
+	i.member_id = m.member_id
+	ORDER BY
+	CAST(SUBSTRING(i.item_num, 5) AS UNSIGNED) DESC;
     </select>
-     
+     <!-- 특정리스트 뽑는 매퍼 -->
      <select id="getList" resultMap="itemResultMap"  resultType="ItemList">
-    	select * from itemlist where #{itemNum}
+    	select * from itemlist where item_num=#{itemNum}
     </select>
-    
+    <!-- 리스트 추가 매퍼 -->
     <insert id="insertList" parameterType="ItemList"
 		useGeneratedKeys="true" keyProperty="itemNum">
     	insert into itemlist ( item_name, item_producer, item_content, item_price, item_file,item_date) 
     	values (#{itemName},#{itemProducer},#{itemContent},#{itemPrice},#{itemFile},SYSDATE())
     </insert> 
+    <!-- 리스트 수정 매퍼 -->
+    <update id="updateList" parameterType="ItemList">
+    	update itemlist set item_name=#{itemName}, item_producer=#{itemProducer}, item_content=#{itemContent}, 
+    	item_price=#{itemPrice}, item_file=#{itemFile}, item_date=SYSDATE() where item_num=#{itemNum}
+    </update>
+    <!-- 리스트 삭제 매퍼 -->
+    <delete id="deleteList" parameterType="ItemList">
+    	delete from itemlist where item_num=#{itemNum}
+    </delete>
 
     <resultMap id="itemResultMap" type="ItemList">
 	    <id property="itemNum" column="item_num"/>
@@ -27,6 +48,8 @@
 	    <result property="itemItr" column="item_itr"/>
 	    <result property="itemDate" column="item_date" />
 	    <result property="itemFile" column="item_file"/>
+	    <result property="memberId" column="member_id"/>
 	</resultMap>
+	
 
 </mapper>

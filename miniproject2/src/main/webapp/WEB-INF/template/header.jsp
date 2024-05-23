@@ -4,16 +4,14 @@
 <!-- header  -->
 <div class="row border-bottom border-primary align-item-center" id="global-header">
 	<div class= "row d-flex align-items-center my-2">
-		<div class="col-3" >
-			<p>
-			<a href="main">
+		<div class="col-3  " >
+			<a href="main" class="align-item-center">
 				<img src="resources/images/로고최종a.png"
 					style="height: 80px; width: 240px">
 			</a>
-			</p>
 		</div>
 		<div class="col-1 ">
-			<a class="nav-link " href="#" style="font-size:25px;">거래소</a>
+			<a class="nav-link " href="exChange" style="font-size:25px;">거래소</a>
 		</div>
 		<div class="col-2 mx-3">
 			<a class="nav-link " href="itemList" style="font-size:25px;">물품리스트</a>
