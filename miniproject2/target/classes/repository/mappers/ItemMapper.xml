@@ -26,13 +26,13 @@
     <!-- 리스트 추가 매퍼 -->
     <insert id="insertList" parameterType="ItemList"
 		useGeneratedKeys="true" keyProperty="itemNum">
-    	insert into itemlist ( item_name, item_producer, item_content, item_price, item_file,item_date) 
-    	values (#{itemName},#{itemProducer},#{itemContent},#{itemPrice},#{itemFile},SYSDATE())
+    	insert into itemlist ( item_name, item_producer, item_content, item_price, item_file,item_start_date,item_end_date,member_id) 
+    	values (#{itemName},#{itemProducer},#{itemContent},#{itemPrice},#{itemFile},#{itemStartDate},#{itemEndDate},#{memberId})
     </insert> 
     <!-- 리스트 수정 매퍼 -->
     <update id="updateList" parameterType="ItemList">
     	update itemlist set item_name=#{itemName}, item_producer=#{itemProducer}, item_content=#{itemContent}, 
-    	item_price=#{itemPrice}, item_file=#{itemFile}, item_date=SYSDATE() where item_num=#{itemNum}
+    	item_price=#{itemPrice}, item_file=#{itemFile},item_start_date=#{itemStartDate} ,item_end_date=#{itemEndDate} where item_num=#{itemNum}
     </update>
     <!-- 리스트 삭제 매퍼 -->
     <delete id="deleteList" parameterType="ItemList">
@@ -48,6 +48,8 @@
 	    <result property="itemItr" column="item_itr"/>
 	    <result property="itemDate" column="item_date" />
 	    <result property="itemFile" column="item_file"/>
+	    <result property="itemStartDate" column="item_start_date"/>
+	    <result property="itemEndDate" column="item_end_date"/>
 	    <result property="memberId" column="member_id"/>
 	</resultMap>
 	

@@ -28,12 +28,13 @@ public class ItemListDaoImpl implements ItemListDao{
 	
 	  @Override 
 	  public ItemList getList(String itemNum) {
-	  
+		  
 	  return sqlSession.selectOne(NAME_SPACE+".getList",itemNum); 
 	  }
 	  
 	  @Override 
 	  public void insertList(ItemList itemList) {
+		  
 	  sqlSession.insert(NAME_SPACE+".insertList",itemList);
 	  
 	  }

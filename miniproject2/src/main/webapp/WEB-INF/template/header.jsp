@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<script src="resources/js/jquery-3.2.1.min.js"></script>
 <!-- header  -->
 <div class="row border-bottom border-primary align-item-center" id="global-header">
 	<div class= "row d-flex align-items-center my-2">
@@ -11,14 +12,21 @@
 			</a>
 		</div>
 		<div class="col-1 ">
-			<a class="nav-link " href="exChange" style="font-size:25px;">거래소</a>
+			<a class="nav-link " href="exChange?itemNum=${iListNum}" style="font-size:25px;">거래소</a>
 		</div>
 		<div class="col-2 mx-3">
 			<a class="nav-link " href="itemList" style="font-size:25px;">물품리스트</a>
 		</div>
 		<div class="col d-flex justify-content-end">
-				<a class="nav-link " href="#" style="font-size:20px;">로그인</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a class="nav-link" href="#" style="font-size:20px;">회원가입</a>
+				<a class="nav-link "  style="font-size:20px;"${ not sessionScope.isLogin ? "data-bs-toggle='modal' data-bs-target='#loginModal'" : ""}
+							href='${ sessionScope.isLogin ? "logout" : "#" }'>
+							${ sessionScope.isLogin ? "로그아웃" : " 로그인" }</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<c:if test="${ not sessionScope.isLogin }" >
+					<a class="nav-link" href="joinForm"  style="font-size:20px;">회원가입</a>
+					</c:if>
+					<c:if test="${ sessionScope.isLogin }" >
+					<a class="nav-link" href="#"  style="font-size:20px;">정보수정</a>
+					</c:if>
 		</div>
 	</div>
 </div>

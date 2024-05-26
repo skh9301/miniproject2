@@ -18,4 +18,10 @@ public class AuctionServiceImpl implements  AuctionService{
 	public List<Auction> auctionList() {
 		return autionDao.auctionList();
 	}
+
+	@Override
+	public void insertAuction(Auction auction) {
+		autionDao.insertAuction(auction);
+		
+	}
 }

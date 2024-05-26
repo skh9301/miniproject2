@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,14 +47,17 @@ public class ItemListController {
 	  @RequestMapping(value={"/itemList","/list"},method=RequestMethod.GET) 
 	  public String itemList(Model model) { 
 		  List<ItemList> iList = itemService.itemList();
-	  model.addAttribute("iList",iList); 
-	  return "itemList"; 
+		  model.addAttribute("iListNum",iList.get(0).getItemNum());
+		  model.addAttribute("iList",iList); 
+		  return "itemList"; 
 	  }
 	
 	
 	// 메인 페이지 메핑
 	@RequestMapping({"/main","/"})
-	public String main(){
+	public String main(Model model){
+		List<ItemList> iList = itemService.itemList();
+		  model.addAttribute("iListNum",iList.get(0).getItemNum()); 
 		return "main";
 	}
 	
@@ -61,25 +65,31 @@ public class ItemListController {
 	  
 		
 		  @PostMapping("/writeProcess") 
-		  public String insertList(HttpServletRequest req, String itemName, String itemProducer, String itemContent, int itemPrice,
-		  @RequestParam(value="itemFile", required=false) MultipartFile multipartFile)
+		  public String insertList(Model model, HttpServletRequest req, String itemName, String itemProducer, String itemContent, int itemPrice,
+		  @RequestParam(value="itemFile", required=false) MultipartFile multipartFile, String  itemEndDate, String  itemStartDate,String memberId)
 		  throws IOException { 
+			  
 			  ItemList itemList = new ItemList();
 		  itemList.setItemName(itemName); 
 		  itemList.setItemProducer(itemProducer);
 		  itemList.setItemPrice(itemPrice);
 		  itemList.setItemContent(itemContent);
-		  System.out.println(multipartFile);
+		  itemList.setItemStartDate(itemStartDate);
+		  itemList.setItemEndDate(itemEndDate);
+		  itemList.setMemberId(memberId);
+		  
+		  
 		  if(!multipartFile.isEmpty()) { 
 			  String filePath =  req.getServletContext().getRealPath(DEFAULT_PATH); 
 			  UUID uid =  UUID.randomUUID(); 
-			  String saveName = uid.toString() + "_" +
-		  multipartFile.getOriginalFilename();
-		  
-		  File file = new File(filePath, saveName); 
-		  multipartFile.transferTo(file);
-		  itemList.setItemFile(saveName); 
+			  String saveName = uid.toString() + "_" +  multipartFile.getOriginalFilename();
+			  
+			  File file = new File(filePath, saveName); 
+			  multipartFile.transferTo(file);
+			  itemList.setItemFile(saveName); 
+			  System.out.println(filePath);
 		  } 
+		  
 		  itemService.insertList(itemList);
 		  return	  "redirect:itemList"; 
 		  }
@@ -88,17 +98,19 @@ public class ItemListController {
 	  
 		
 		  @RequestMapping("/fileDownload") public void download(HttpServletRequest req,
-		  HttpServletResponse resp) throws IOException{ String fileName
-		  =req.getParameter("fileName"); String filePath =
-		 req.getServletContext().getRealPath(DEFAULT_PATH); File file = new
-		  File(filePath, fileName);
+		  HttpServletResponse resp) throws IOException{ 
+			  String fileName  =req.getParameter("fileName");
+			  String filePath = req.getServletContext().getRealPath(DEFAULT_PATH); 
+		  File file = new  File(filePath, fileName);
 		  resp.setContentType("application/download; charset=UTF-8");
 		  resp.setContentLength((int) file.length()); fileName =
 		  URLEncoder.encode(file.getName(), "UTF-8");
 		  resp.setHeader("Content-Disposition", "attachment; filename=\"" + fileName +
-		  "\";"); resp.setHeader("Content-Transfer-Encoding", "binary"); OutputStream
-		  out = resp.getOutputStream(); FileInputStream fis = null; fis = new
-		  FileInputStream(file); FileCopyUtils.copy(fis, out); if(fis != null) {
+		  "\";"); 
+		  resp.setHeader("Content-Transfer-Encoding", "binary"); 
+		  OutputStream out = resp.getOutputStream(); FileInputStream fis = null; fis = new
+		  FileInputStream(file); FileCopyUtils.copy(fis, out); 
+		  if(fis != null) {
 		  fis.close();
 		  
 		  } out.flush(); }
@@ -106,15 +118,18 @@ public class ItemListController {
 	  
 	  
 	 @RequestMapping("/writeForm") 
-	 public String insertList() 
-	 { return  "writeForm"; 
+	 public String insertList(Model model) {
+		 List<ItemList> iList = itemService.itemList();
+		 model.addAttribute("iListNum",iList.get(0).getItemNum());
+		 return  "writeForm"; 
 	 }
 	 //아이템게시판 상세페이지
 	 
 	 @RequestMapping("/itemDetail") 
 	 public String itemDetail(Model model,String itemNum) {
-		 ItemList itemList = itemService.getList(itemNum);
-	  model.addAttribute("itemList",itemList);
+		 ItemList iList = itemService.getList(itemNum);
+	  model.addAttribute("itemList",iList);
+	  model.addAttribute("iListNum",iList.getItemNum());
 	  return "itemDetail";
 	  }
 	  
@@ -126,7 +141,6 @@ public class ItemListController {
 	  
 	  @PostMapping("/updateProcess") 
 	  public String updateList(ItemList itemList) {
-		  System.out.print("itemList : " + itemList);
 		 
 		  itemService.updateList(itemList); 
 	  
@@ -138,20 +152,29 @@ public class ItemListController {
 	  public String updateList(String itemNum, Model model) { 
 		  ItemList itemList = itemService.getList(itemNum);
 		  model.addAttribute("itemList",itemList); 
-	  
+		  model.addAttribute("iListNum",itemList.getItemNum()); 
+		  
 	  return "updateList";
 	  }
 	  
 	  //거래소 사이트
 	 @RequestMapping("/exChange")
-	 public String exChange(Model model) {
+	 public String exChange(Model model,String itemNum, Auction auction) {
 		 List<ItemList> iList = itemService.itemList();
+		 ItemList item = itemService.getList(itemNum);
 		 List<Auction> aList = auctionService.auctionList();
 		 //List<Member> mList = memberService.auctionList();
+		 
+		 // 옥션 테이블- 아래 출력
 		 model.addAttribute("aList",aList);
+		 //현재 물품 판매-현페이지 출력
+		 model.addAttribute("item",item);
+		 //물품 리스트 -> 오른쪽 출력
 		 model.addAttribute("iList",iList);
 		 //model.addAttribute("mList",mList);
 		 
 		 return "exChange";
 	 }
+	 
+	 
 }

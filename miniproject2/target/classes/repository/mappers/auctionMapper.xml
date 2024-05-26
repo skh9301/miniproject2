@@ -20,10 +20,19 @@ ORDER BY
     CAST(SUBSTRING(a.auction_num, 5) AS UNSIGNED) DESC;
 	</select>
 	
+	<insert id="insertAuction" parameterType="Auction"
+		useGeneratedKeys="true" keyProperty="itemNum">
+		INSERT INTO auction (reg_price, item_num, member_id)
+VALUES (#{regPrice}, #{itemNum}, #{memberId});
+	</insert>
+	
 	
 	<resultMap id="auctionResultMap" type="Auction">
 	    <id property="auctionNum" column="auction_num"/>
 	    <result property="regPrice" column="reg_price"/>
+	    <result property="memberId" column="member_id"/>
+	    <result property="memberNick" column="member_nick"/>
+	    <result property="item_num" column="itemNum"/>
 	</resultMap>
 
 </mapper>

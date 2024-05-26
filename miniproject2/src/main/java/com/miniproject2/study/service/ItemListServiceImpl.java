@@ -22,6 +22,7 @@ public class ItemListServiceImpl implements ItemListService{
 
 	@Override 
 	public ItemList getList(String itemNum){
+
 		return	itemListDao.getList(itemNum); 
 		}
 

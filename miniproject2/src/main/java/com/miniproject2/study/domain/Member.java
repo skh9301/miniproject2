@@ -3,7 +3,7 @@ package com.miniproject2.study.domain;
 public class Member {
 	String memberId;
 	String memberPass;
-	String memberNice;
+	String memberNick;
 	String memberAddress;
 	int memberPoint;
 	String memberPhone;
@@ -13,12 +13,12 @@ public class Member {
 	
 	
 
-	public Member(String memberId, String memberPass, String memberNice, String memberAddress, int memberPoint,
+	public Member(String memberId, String memberPass, String memberNick, String memberAddress, int memberPoint,
 			String memberPhone, String memberEmail) {
 		super();
 		this.memberId = memberId;
 		this.memberPass = memberPass;
-		this.memberNice = memberNice;
+		this.memberNick = memberNick;
 		this.memberAddress = memberAddress;
 		this.memberPoint = memberPoint;
 		this.memberPhone = memberPhone;
@@ -43,12 +43,12 @@ public class Member {
 		this.memberPass = memberPass;
 	}
 
-	public String getMemberNice() {
-		return memberNice;
+	public String getMemberNick() {
+		return memberNick;
 	}
 
-	public void setMemberNice(String memberNice) {
-		this.memberNice = memberNice;
+	public void setMemberNick(String memberNick) {
+		this.memberNick = memberNick;
 	}
 
 	public String getMemberAddress() {

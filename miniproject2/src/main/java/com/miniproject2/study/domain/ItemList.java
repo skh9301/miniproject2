@@ -2,6 +2,8 @@ package com.miniproject2.study.domain;
 
 import java.sql.Timestamp;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ItemList {
 	String itemNum;
 	String itemName;
@@ -10,7 +12,8 @@ public class ItemList {
 	int itemPrice;
 	String itemFile;
 	String itemItr;
-	Timestamp  itemDate;
+	String  itemStartDate;
+	String  itemEndDate;
 	String memberId;
 	
 	public ItemList() {}
@@ -18,7 +21,7 @@ public class ItemList {
 	
 	
 	public ItemList(String itemNum, String itemName, String itemProducer, String itemContent, int itemPrice,
-			String itemFile, String itemItr, Timestamp  itemDate, String memberId) {
+			String itemFile, String itemItr,  String memberId , String  itemStartDate, String  itemEndDate) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
@@ -27,7 +30,9 @@ public class ItemList {
 		this.itemPrice = itemPrice;
 		this.itemFile = itemFile;
 		this.itemItr = itemItr;
-		this.itemDate = itemDate;
+	
+		this.itemStartDate = itemStartDate;
+		this.itemEndDate = itemEndDate;
 		this. memberId= memberId;
 	}
 
@@ -89,12 +94,19 @@ public class ItemList {
 		this.itemItr = itemItr;
 	}
 
-	public Timestamp  getItemDate() {
-		return itemDate;
+	public String  getItemStartDate() {
+		return itemStartDate;
 	}
-
-	public void setItemDate(Timestamp  itemDate) {
-		this.itemDate = itemDate;
+	
+	public void setItemStartDate(String  itemStartDate) {
+		this.itemStartDate = itemStartDate;
+	}
+	public String  getItemEndDate() {
+		return itemEndDate;
+	}
+	
+	public void setItemEndDate(String  itemEndDate) {
+		this.itemEndDate = itemEndDate;
 	}
 	public String  getMemberId() {
 		return memberId;

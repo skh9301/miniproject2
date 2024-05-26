@@ -22,4 +22,10 @@ public class AuctionDaoImpl implements AuctionDao{
 		return sqlSession.selectList(NAME_SPACE+".auctionList");
 	}
 
+
+	@Override
+	public void insertAuction(Auction auction) {
+		sqlSession.insert(NAME_SPACE+".insertAuction", auction);
+	}
+
 }

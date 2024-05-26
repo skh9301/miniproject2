@@ -6,4 +6,8 @@ import com.miniproject2.study.domain.Auction;
 
 public interface AuctionService {
 	public abstract List<Auction> auctionList();
+	
+	public abstract void insertAuction(Auction auction);
 }
+
+

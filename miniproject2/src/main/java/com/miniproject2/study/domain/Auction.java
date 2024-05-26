@@ -4,14 +4,16 @@ public class Auction {
 	String auctionNum;
 	int regPrice;
 	String memberId;
+	String memberNick;
 	
 	public Auction() {}
 	
-	public Auction(String auctionNum, int regPrice,String memberId) {
+	public Auction(String auctionNum, int regPrice,String memberId,String memberNick) {
 		super();
 		this.auctionNum = auctionNum;
 		this.regPrice = regPrice;
 		this.memberId =memberId;
+		this.memberNick =memberNick;
 		
 	}
 	public String getAuctionNum() {
@@ -32,6 +34,13 @@ public class Auction {
 	
 	public void setMemberId(String memberId  ) {
 		this.memberId = memberId;
+	}
+	public String  getMemberNick() {
+		return memberNick;
+	}
+	
+	public void setMemberNick(String memberNick ) {
+		this.memberNick = memberNick;
 	}
 	
 	
