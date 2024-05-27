@@ -18,8 +18,8 @@ public class AuctionDaoImpl implements AuctionDao{
 
 
 	@Override
-	public List<Auction> auctionList() {
-		return sqlSession.selectList(NAME_SPACE+".auctionList");
+	public List<Auction> auctionList(String itemNum) {
+		return sqlSession.selectList(NAME_SPACE+".auctionList",itemNum);
 	}
 
 

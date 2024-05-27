@@ -5,7 +5,7 @@ import java.util.List;
 import com.miniproject2.study.domain.Auction;
 
 public interface AuctionDao {
-	public abstract List<Auction> auctionList();
+	public abstract List<Auction> auctionList(String itemNum);
 	
 	public abstract void insertAuction(Auction auction);
 }

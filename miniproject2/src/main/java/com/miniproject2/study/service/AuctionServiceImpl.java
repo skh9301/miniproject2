@@ -15,8 +15,8 @@ public class AuctionServiceImpl implements  AuctionService{
 	private AuctionDao autionDao;
 
 	@Override
-	public List<Auction> auctionList() {
-		return autionDao.auctionList();
+	public List<Auction> auctionList(String itemNum) {
+		return autionDao.auctionList(itemNum);
 	}
 
 	@Override

@@ -4,13 +4,12 @@
 
 	<div class="row my-5" >
 		<div class="col">
-			<div class="Atimer bg-dark text-white h-100 fs-1 fw-bold"></div>
+			<div class="timer bg-dark text-white h-100 fs-1 fw-bold text-center" data-start="${item.itemStartDate}" data-end="${item.itemEndDate}"></div>
 		</div>
 	</div>
 <div class="row my-5 text-center border " >
 	<form id="exChange" name="exChange">
 		<input type="hidden" id="itemNum" value="${item.itemNum }">
-		<input type="hidden" id="memberNick" value="나중에 세션스코프에 닉네임넣을거임">
 	</form>
 	<div class="col-8 ">
 		<div class="row">
@@ -50,7 +49,7 @@
 						<div class="row my-2">
 							<div class="col">
 							<div class="input-group mb-3">
-							  <span class="input-group-text text-end" id="basic-addon1" style="width:385px;">${sessionScope.member.memberNick}</span>
+							  <span class="input-group-text text-end" id="basic-addon1" style="width:385px; height:40px;">${sessionScope.member.memberNick == null? "로그인이 되어있지 않습니다." : sessionScope.member.memberNick}</span>
 							</div>
 							</div>
 						</div>
@@ -58,7 +57,7 @@
 							<div class="col">
 								<div class="input-group mb-3">
 									<span class="input-group-text" style="width:130px;">남은 포인트 :</span>
-									 <input	type="text" class="form-control"	aria-label="Amount (to the nearest dollar)" value="${sessionScope.member.memberPoint }"> 
+									 <input	type="text" class="form-control"	aria-label="Amount (to the nearest dollar)" value="${sessionScope.member.memberPoint }" readonly > 
 									 <span	class="input-group-text">point</span>
 								</div>
 							</div>
@@ -111,22 +110,22 @@
 									판매자
 								</th>
 							</tr>
-						<c:if test="${empty iList }">
+						<c:if test="${empty aiList }">
 							<tr>
 								<td class="text-center" colspan="3"> 게시글이 존재하지 않습니다.</td>
 							</tr>
 						</c:if>
-						<c:if test="${not empty iList }">
-							<c:forEach var="iList" items="${iList }">
+						<c:if test="${not empty aiList }">
+							<c:forEach var="aiList" items="${aiList }">
 							<tr>
 								<td>
-									<a href="exChange?itemNum=${iList.itemNum}" class="link-dark">${iList.itemName}</a>
+									<a href="exChange?itemNum=${aiList.itemNum}" class="link-dark ltext-decoration-none">${aiList.itemName}</a>
 								</td>
 								<td>
-									${iList.itemPrice}
+									${aiList.itemPrice}
 								</td>
 								<td>
-									${iList.memberId}
+									${aiList.memberId}
 								</td>
 							</tr>
 							</c:forEach>
@@ -135,5 +134,34 @@
 				</table> 
 			</div>
 		</div>
+		<div class="row">
+	<div class="col">
+		<nav aria-label="Page navigation">
+			<ul class="pagination justify-content-center">
+			<c:if test="${ aStartPage > aPageGroup }">
+					<li class="page-item"><a class="page-link"
+						href="exChange?pageNum=${ aStartPage -
+						aPageGroup }">Pre</a></li>
+				</c:if>
+				<c:forEach var="i" begin="${aStartPage}" end="${aEndPage}">
+					<c:if test="${i == currentPage }">
+						<li class="page-item active" aria-current="page"><span
+							class="page-link">${i}</span></li>
+					</c:if>
+					<c:if test="${i != currentPage }">
+						<li class="page-item"><a class="page-link"
+							href="exChange?itemNum=${item.itemNum }&pageNum=${ i }">${i}</a></li>
+					</c:if>
+				</c:forEach>
+				<c:if test="${ aEndPage < aPageCount }">
+					<li class="page-item"><a class="page-link"
+						href="exChange?pageNum=${ aStartPage +
+								aPageGroup }">Next</a></li>
+				</c:if>
+			</ul>
+		</nav>
 	</div>
+</div>
+	</div>
+	
 </div>

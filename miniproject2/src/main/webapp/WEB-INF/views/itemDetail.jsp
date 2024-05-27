@@ -4,7 +4,12 @@
   <script src="resources/js/formcheck.js"></script> 
     
    <form name="checkForm" id="checkForm">
-   		<input type="hidden" name="itemNum" id="itemNum" value="${itemList.itemNum }"/>
+   		<input type="hidden" name="itemNum" id="iListNum" value="${iListNum}"/>
+   		<input type="hidden" name="pageNum" id="pageNum" value="${pageNum}"/>
+   		<c:if test="${ searchOption }">
+			<input type="hidden" name="type" value="${ type }" />
+			<input type="hidden" name="keyword" value="${ keyword }" />
+		</c:if>
    </form>
 <div class="row my-5 justify-content-center" >
     <div class="col-6 d-flex align-items-center justify-content-center">
@@ -81,13 +86,22 @@
 	    	<c:if test="${sessionScope.member.memberId == itemList.memberId}">
 			    <input class="btn btn-primary" id="detailUpdate" type="button" value="수정하기">
 			    <input class="btn btn-primary" id="detailDelete" type="button" value="삭제하기">
-			    <input class="btn btn-primary" type="button" value="목록보기" onclick="location.href='itemList'"/>
+			    <c:if test="${not searchOption }">
+			    <input class="btn btn-primary" type="button" value="목록보기" onclick="location.href='itemList?pageNum=${pageNum}'"/>
+			    </c:if>
+			    <c:if test="${  searchOption }">
+			    <input class="btn btn-primary" type="button" value="목록보기" onclick="location.href='itemList?pageNum=${pageNum}&type=${type }&keyword=${ keyword }'"/>
+			    </c:if>
 			</c:if>
 			<!-- 회원 아닐때 -->
-			${sessionScope.member.memberId}
 			<c:if test="${sessionScope.member.memberId != itemList.memberId}">
 			    <input class="btn btn-primary" id="detailItem" type="button" value="즐겨찾기">
-			    <input class="btn btn-primary" type="button" value="목록보기" onclick="location.href='itemList'"/>
+			    <c:if test="${not searchOption }">
+			    <input class="btn btn-primary" type="button" value="목록보기" onclick="location.href='itemList?pageNum=${pageNum}'"/>
+			    </c:if>
+			    <c:if test="${  searchOption }">
+			    <input class="btn btn-primary" type="button" value="목록보기" onclick="location.href='itemList?pageNum=${pageNum}&type=${type }&keyword=${ keyword }'"/>
+			    </c:if>
 			</c:if>
 	    </div>
 	</div>

@@ -1,6 +1,8 @@
 package com.miniproject2.study.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,38 @@ public class ItemListDaoImpl implements ItemListDao{
 
 
 	
+	@Override
+	public List<ItemList> itemList(int startRow,int num,String type, String keyword) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("startRow", startRow);
+		params.put("num", num);
+		params.put("type", type);
+		params.put("keyword", keyword);
+		
+		return	  sqlSession.selectList(NAME_SPACE+".itemList",params); 
+	}
 	  @Override
-	  public List<ItemList> itemList() { return
-	  sqlSession.selectList(NAME_SPACE+".itemList"); }
+	  public List<ItemList> itemList(int startRow,int num) {
+		  Map<String, Object> params = new HashMap<String, Object>();
+		  params.put("startRow", startRow);
+		  params.put("num", num);
+		  
+		  return	  sqlSession.selectList(NAME_SPACE+".itemList",params); 
+	}
 	 
-
+	  // 게시글리스트 카운트
+		@Override
+		public int getItemCount(String type, String keyword) {
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("type", type);
+			params.put("keyword", keyword);
+			return sqlSession.selectOne(NAME_SPACE+".getItemCount",params);
+		}
+		// 옥션물품리스트 카운트
+		@Override
+		public int getItemCount() {
+			return sqlSession.selectOne(NAME_SPACE+".getItemCountA");
+		}
 	
 	  @Override 
 	  public ItemList getList(String itemNum) {
@@ -50,6 +79,17 @@ public class ItemListDaoImpl implements ItemListDao{
 	  sqlSession.delete(NAME_SPACE+".deleteList",itemNum); 
 	  
 	  }
+
+	@Override
+	public List<ItemList> itemList() {
+		return sqlSession.selectList(NAME_SPACE+".itemListH"); 
+	}
+
+
+
+
+
+	
 	 
 
 }

@@ -4,9 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miniproject2.study.domain.Auction;
 import com.miniproject2.study.domain.ItemList;
@@ -45,10 +50,18 @@ public class ItemListController {
 	
 	// 아이템게시판 메핑
 	  @RequestMapping(value={"/itemList","/list"},method=RequestMethod.GET) 
-	  public String itemList(Model model) { 
+	  public String itemList(Model model, @RequestParam(value="pageNum",required=false, defaultValue="1")int pageNum,
+			  @RequestParam(value="type", required=false,
+			  defaultValue="null") String type,
+			  @RequestParam(value="keyword", required=false,
+			  defaultValue="null") String keyword) { 
+		  Map<String, Object> modelMap =
+				  itemService.itemList(pageNum, type, keyword);
+		  
 		  List<ItemList> iList = itemService.itemList();
+		  
+		  model.addAllAttributes(modelMap);
 		  model.addAttribute("iListNum",iList.get(0).getItemNum());
-		  model.addAttribute("iList",iList); 
 		  return "itemList"; 
 	  }
 	
@@ -56,8 +69,10 @@ public class ItemListController {
 	// 메인 페이지 메핑
 	@RequestMapping({"/main","/"})
 	public String main(Model model){
+		
 		List<ItemList> iList = itemService.itemList();
 		  model.addAttribute("iListNum",iList.get(0).getItemNum()); 
+		  
 		return "main";
 	}
 	
@@ -66,8 +81,15 @@ public class ItemListController {
 		
 		  @PostMapping("/writeProcess") 
 		  public String insertList(Model model, HttpServletRequest req, String itemName, String itemProducer, String itemContent, int itemPrice,
-		  @RequestParam(value="itemFile", required=false) MultipartFile multipartFile, String  itemEndDate, String  itemStartDate,String memberId)
+		  @RequestParam(value="itemFile", required=false) MultipartFile multipartFile, String  itemEndDate, String  itemStartDate,String memberId
+		  , @RequestParam(value="pageNum", required=false,
+			 defaultValue="1") int pageNum,
+			 @RequestParam(value="type", required=false,
+			 defaultValue="null") String type,
+			 @RequestParam(value="keyword", required=false,
+			 defaultValue="null") String keyword )
 		  throws IOException { 
+			  
 			  
 			  ItemList itemList = new ItemList();
 		  itemList.setItemName(itemName); 
@@ -89,6 +111,15 @@ public class ItemListController {
 			  itemList.setItemFile(saveName); 
 			  System.out.println(filePath);
 		  } 
+		  
+			 boolean searchOption = (type.equals("null")
+					 || keyword.equals("null")) ? false : true;
+			 if(searchOption) {
+					model.addAttribute("type", type);
+					model.addAttribute("keyword", keyword);
+				}
+			model.addAttribute("searchOption",searchOption);
+			model.addAttribute("pageNum",pageNum);
 		  
 		  itemService.insertList(itemList);
 		  return	  "redirect:itemList"; 
@@ -118,40 +149,121 @@ public class ItemListController {
 	  
 	  
 	 @RequestMapping("/writeForm") 
-	 public String insertList(Model model) {
+	 public String insertList(Model model,
+			 @RequestParam(value="pageNum", required=false,
+			 defaultValue="1") int pageNum,
+			 @RequestParam(value="type", required=false,
+			 defaultValue="null") String type,
+			 @RequestParam(value="keyword", required=false,
+			 defaultValue="null") String keyword) {
+		 
 		 List<ItemList> iList = itemService.itemList();
+		 
+		 boolean searchOption = (type.equals("null")
+				 || keyword.equals("null")) ? false : true;
+		 
+		 if(searchOption) {
+				model.addAttribute("type", type);
+				model.addAttribute("keyword", keyword);
+			}
+		 
+		model.addAttribute("searchOption",searchOption);
+		model.addAttribute("pageNum",pageNum);
+		 
 		 model.addAttribute("iListNum",iList.get(0).getItemNum());
 		 return  "writeForm"; 
 	 }
-	 //아이템게시판 상세페이지
 	 
+	 
+	 //아이템게시판 상세페이지
 	 @RequestMapping("/itemDetail") 
-	 public String itemDetail(Model model,String itemNum) {
-		 ItemList iList = itemService.getList(itemNum);
+	 public String itemDetail(Model model,String itemNum,
+			 @RequestParam(value="pageNum", required=false,
+			 defaultValue="1") int pageNum,
+			 @RequestParam(value="type", required=false,
+			 defaultValue="null") String type,
+			 @RequestParam(value="keyword", required=false,
+			 defaultValue="null") String keyword) {
+		 
+	 ItemList iList = itemService.getList(itemNum);
+	 boolean searchOption = (type.equals("null")
+			 || keyword.equals("null")) ? false : true;
+	 
+	 model.addAttribute("searchOption", searchOption);
+	// 검색 요청이면 type과 keyword를 모델에 저장한다.
+	if(searchOption) {
+		model.addAttribute("type", type);
+		model.addAttribute("keyword", keyword);
+	}
+		model.addAttribute("pageNum",pageNum);
 	  model.addAttribute("itemList",iList);
 	  model.addAttribute("iListNum",iList.getItemNum());
 	  return "itemDetail";
 	  }
 	  
 	  @PostMapping("/delete") 
-	  public String deleteList(String itemNum) {
+	  public String deleteList(String itemNum,RedirectAttributes reAttrs,
+			  @RequestParam(value="pageNum", required=false, defaultValue="1")
+	  int pageNum,
+	  @RequestParam(value="type", required=false,
+	  defaultValue="null") String type,
+	  @RequestParam(value="keyword", required=false,
+	  defaultValue="null") String keyword) {
+		  
 	 itemService.deleteList(itemNum); 
+	 
+	 boolean searchOption = (type.equals("null")
+			 || keyword.equals("null")) ? false : true;
+	 
+	 reAttrs.addAttribute("searchOption", searchOption);
+	 if(searchOption) {
+		 reAttrs.addAttribute("type", type);
+		 reAttrs.addAttribute("keyword", keyword);
+	 }
+	 reAttrs.addAttribute("pageNum", pageNum);
 	 return "redirect:itemList"; 
 	 }
 	  
 	  @PostMapping("/updateProcess") 
-	  public String updateList(ItemList itemList) {
+	  public String updateList(ItemList itemList,RedirectAttributes reAttrs,
+			  @RequestParam(value="pageNum", required=false, defaultValue="1")
+	  int pageNum,
+	  @RequestParam(value="type", required=false,
+	  defaultValue="null") String type,
+	  @RequestParam(value="keyword", required=false,
+	  defaultValue="null") String keyword) {
 		 
 		  itemService.updateList(itemList); 
-	  
+		  boolean searchOption = (type.equals("null")
+				  || keyword.equals("null")) ? false : true;
+		  reAttrs.addAttribute("searchOption", searchOption);
+		  if(searchOption) {
+			  reAttrs.addAttribute("type", type);
+			  reAttrs.addAttribute("keyword", keyword);
+		  }
+		  reAttrs.addAttribute("pageNum", pageNum);
 	  
 	  return "redirect:itemList"; 
 	  }
 	  
 	  @RequestMapping("/update") 
-	  public String updateList(String itemNum, Model model) { 
+	  public String updateList(String itemNum, Model model,
+			  @RequestParam(value="pageNum", required=false, defaultValue="1")
+			  int pageNum,
+			  @RequestParam(value="type", required=false, defaultValue="null") String type,
+			  @RequestParam(value="keyword", required=false,  defaultValue="null") String keyword) { 
 		  ItemList itemList = itemService.getList(itemNum);
+		  boolean searchOption = (type.equals("null")
+				  || keyword.equals("null")) ? false : true;
+		  
+		  model.addAttribute("searchOption", searchOption);
+			// 검색 요청이면 type과 keyword를 모델에 저장한다.
+			if(searchOption) {
+			model.addAttribute("type", type);
+			model.addAttribute("keyword", keyword);
+			}
 		  model.addAttribute("itemList",itemList); 
+		  model.addAttribute("pageNum", pageNum);
 		  model.addAttribute("iListNum",itemList.getItemNum()); 
 		  
 	  return "updateList";
@@ -159,19 +271,20 @@ public class ItemListController {
 	  
 	  //거래소 사이트
 	 @RequestMapping("/exChange")
-	 public String exChange(Model model,String itemNum, Auction auction) {
-		 List<ItemList> iList = itemService.itemList();
+	 public String exChange(Model model,String itemNum, Auction auction, @RequestParam(value="pageNum",required=false, defaultValue="1")int pageNum) {
+		 Map<String,Object> modelMap = itemService.itemList(pageNum);
 		 ItemList item = itemService.getList(itemNum);
-		 List<Auction> aList = auctionService.auctionList();
-		 //List<Member> mList = memberService.auctionList();
+		 List<Auction> aList = auctionService.auctionList(itemNum);
+		 
 		 
 		 // 옥션 테이블- 아래 출력
 		 model.addAttribute("aList",aList);
 		 //현재 물품 판매-현페이지 출력
 		 model.addAttribute("item",item);
 		 //물품 리스트 -> 오른쪽 출력
-		 model.addAttribute("iList",iList);
-		 //model.addAttribute("mList",mList);
+		 model.addAllAttributes(modelMap);
+		 model.addAttribute("iListNum",item.getItemNum()); 
+		 model.addAttribute("pageNum",pageNum);
 		 
 		 return "exChange";
 	 }

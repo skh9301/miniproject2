@@ -6,7 +6,32 @@
 
 
 	<!-- 리스트 뽑는 매퍼 -->
-     <select id="itemList" resultMap="itemResultMap" resultType="ItemList">
+     <select id="itemList" resultMap="itemResultMap" resultType="ItemList" parameterType="hashmap">
+	    SELECT
+        i.*,
+        m.member_nick
+    FROM
+        itemlist i
+    JOIN
+        memberlist m ON i.member_id = m.member_id
+    <where>
+        <if test="type == 'item_name'">
+            i.item_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'member_id'">
+            i.member_id LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'item_producer'">
+            i.item_producer LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </where>
+    ORDER BY
+        CAST(SUBSTRING(i.item_num, 5) AS UNSIGNED) DESC
+    LIMIT #{startRow}, #{num}
+    </select>
+    
+	<!-- 헤더에 추가할 리스트 뽑는 매퍼 -->
+     <select id="itemListH" resultMap="itemResultMap" resultType="ItemList">
 	SELECT
 	i.*,
 	m.member_nick
@@ -17,23 +42,52 @@
 	ON
 	i.member_id = m.member_id
 	ORDER BY
-	CAST(SUBSTRING(i.item_num, 5) AS UNSIGNED) DESC;
+	CAST(SUBSTRING(i.item_num, 5) AS UNSIGNED) DESC 
     </select>
+    
+    <!-- 게시글 겟수 가저오는 메핑 -->
+    <select id="getItemCount" resultType="int">
+    	select Count(*) from itemList
+    <where>
+        <if test="type == 'item_name'">
+            item_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'member_id'">
+            member_id LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'item_producer'">
+            item_producer LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </where>
+    	
+    </select>
+    
+    <!-- 옥션에 게시할 게시글 겟수 가저오는 메핑 -->
+    <select id="getItemCountA" resultType="int">
+    	select Count(*) from itemList
+ 
+    	
+    </select>
+    
+    
      <!-- 특정리스트 뽑는 매퍼 -->
      <select id="getList" resultMap="itemResultMap"  resultType="ItemList">
     	select * from itemlist where item_num=#{itemNum}
     </select>
+    
     <!-- 리스트 추가 매퍼 -->
     <insert id="insertList" parameterType="ItemList"
 		useGeneratedKeys="true" keyProperty="itemNum">
     	insert into itemlist ( item_name, item_producer, item_content, item_price, item_file,item_start_date,item_end_date,member_id) 
     	values (#{itemName},#{itemProducer},#{itemContent},#{itemPrice},#{itemFile},#{itemStartDate},#{itemEndDate},#{memberId})
     </insert> 
+    
     <!-- 리스트 수정 매퍼 -->
     <update id="updateList" parameterType="ItemList">
     	update itemlist set item_name=#{itemName}, item_producer=#{itemProducer}, item_content=#{itemContent}, 
     	item_price=#{itemPrice}, item_file=#{itemFile},item_start_date=#{itemStartDate} ,item_end_date=#{itemEndDate} where item_num=#{itemNum}
     </update>
+    
     <!-- 리스트 삭제 매퍼 -->
     <delete id="deleteList" parameterType="ItemList">
     	delete from itemlist where item_num=#{itemNum}

@@ -16,4 +16,5 @@ $(function() {
 		typing();   // Start the typing effect
 		
 		
-	});
+	 
+});

@@ -22,7 +22,6 @@ import com.miniproject2.study.domain.Member;
 import com.miniproject2.study.service.MemberService;
 
 @Controller
-@SessionAttributes("member")
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
@@ -58,7 +57,7 @@ public class MemberController {
 		
 		Member member = memberService.getMember(memberId);
 		session.setAttribute("isLogin", true);
-		model.addAttribute("member", member);
+		session.setAttribute("member", member);
 		
 		return "redirect:/main";
 	}
@@ -67,7 +66,7 @@ public class MemberController {
 	public String logout(HttpSession session) {
 		session.invalidate();
 		
-		return "redirect:/list";
+		return "redirect:/main";
 	}
 	
 	@RequestMapping("/joinResult")
@@ -91,7 +90,7 @@ public class MemberController {
 		memberService.addMember(member);
 		
 		//로그인 폼으로 리다이렉트 시킨다.
-		return "redirect:main";
+		return "redirect:/main";
 	}
 	
 	//회원가입 폼에서 들어오는 중복 아이디 체크 요청을 처리하는 메서드
