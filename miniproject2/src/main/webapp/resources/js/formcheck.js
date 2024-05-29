@@ -1,28 +1,6 @@
 $(function() {
- 		$(".AuctionJoin").click(function(){
-		    var clickedTimerText = $(this).find(".timer").text();
-		  	
-		  	
-		  	$.ajax({
-		  		url="AuctionJoin.ajax",
-		  		data: { timerText: clickedTimerText },
-		  		 dataType:'json',
-		  		success: function(response) {
-		  	 if (clickedTimerText === "판매가 종료되었습니다.") {
-		        alert("판매가 종료되었습니다.");
-		        history.back();
-		        
-		    }
-		     event.preventDefault();
-		  		
-		  	},
-		  	 error: function(xhr, status, error) {
-            // AJAX 요청이 실패했을 때 실행할 코드
-            console.error("AJAX 요청 실패:", status, error);
-        }
-		  	
-		});
-		
+	
+				
 		
 		//타이머 부분
 		 const timers = $('.timer');

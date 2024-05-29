@@ -21,4 +21,13 @@ public class ItemListAjaxController {
 	@Autowired
 	private AuctionService auctionService;
 	
+	
+	@RequestMapping("/AuctionJoin.ajax")
+	@ResponseBody
+	public ItemList AuctionJoin(String itemNum) {
+		ItemList item = itemService.getList(itemNum);
+		return item;
+	}
+	
+	
 }

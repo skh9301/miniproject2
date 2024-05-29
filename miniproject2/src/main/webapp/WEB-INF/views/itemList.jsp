@@ -6,6 +6,7 @@
 <form name="searchForm" id="searchForm" action="itemList">
 <input type="hidden" value="${sessionScope.member.memberId }"
 		id="SmemberId">
+		
 <div class="row m-5 py-3  border-bottom justify-content-center">
 	<div class="col-auto ">
 		<select name="type" class="form-select">
@@ -86,7 +87,7 @@
 							<td></td>
 							<td class="text-end">
 								<!-- 아이디 가 admin이 아닐때 --> <a class="btn btn-primary AuctionJoin"
-								href="exChange?itemNum=${iList.itemNum}">경매참여</a>
+								href="exChange?itemNum=${iList.itemNum}" data-item-num="${iList.itemNum }">경매참여</a>
 								 <!-- 세션과 아이디 가 같을때  -->
 								<c:if test="${sessionScope.member.memberId ==iList.memberId}">
 
@@ -127,7 +128,7 @@
 							<td></td>
 							<td class="text-end">
 								<!-- 아이디 가 admin이 아닐때 --> 
-								<a class="btn btn-primary AuctionJoin" href="exChange?itemNum=${iList.itemNum}" >경매참여
+								<a class="btn btn-primary AuctionJoin" href="exChange?itemNum=${iList.itemNum}" data-item-num="${iList.itemNum }">경매참여
 								</a> 
 								<!-- 아이디 가 admin일때 -->
 								<c:if test="${sessionScope.member.memberId ==iList.memberId}">
@@ -151,8 +152,7 @@
 			<ul class="pagination justify-content-center">
 				<c:if test="${ startPage > pageGroup }">
 					<li class="page-item"><a class="page-link"
-						href="itemList?pageNum=${ startPage -
-pageGroup }">Pre</a></li>
+						href="itemList?pageNum=${ startPage -pageGroup }">Pre</a></li>
 				</c:if>
 				<c:forEach var="i" begin="${startPage}" end="${endPage}">
 					<c:if test="${i == currentPage }">
