@@ -19,7 +19,9 @@
 		WHERE 
 		    i.item_num =#{itemNum}
 		ORDER BY 
-    CAST(SUBSTRING(a.auction_num, 5) AS UNSIGNED) DESC;
+    CAST(SUBSTRING(a.auction_num, 5) AS UNSIGNED) DESC
+    LIMIT 0, 8
+    ;
 	</select>
 	
 	<insert id="insertAuction" parameterType="Auction">

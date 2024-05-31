@@ -6,7 +6,9 @@ import java.util.Map;
 import com.miniproject2.study.domain.ItemList;
 
 public interface ItemListService {
-		
+		//즐겨찾기한 리스트만 뽑기
+		public abstract List<ItemList> getBidList(String fonkyMemberId);
+	
 	
 		//아이템리스트를 출력하는 메서드
 		//옥션용

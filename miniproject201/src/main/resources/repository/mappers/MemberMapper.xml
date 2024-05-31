@@ -4,11 +4,41 @@
 
 <mapper namespace="com.miniproject2.mapper.MemberMapper" >
 
+<!-- 옥션에서 포인트를 차감하고 업데이트 -->
+<update id="deDuctionPoint"  parameterType="Member">
+	update memberlist set member_point=#{memberPoint} where member_id = #{memberId} 
+</update>
+
+
+
+
+<!-- 회원 테이블에서 id에 해당하는 비밀번호를 가져오는 맵핑 구문 -->
+<select id = "memberPassCheck" resultType ="String">
+SELECT member_pass FROM memberlist WHERE member_Id = #{memberId}
+</select>
+
+<!-- 회원 정보를 수정하는 맵핑 구문 -->
+<update id ="updateMember" parameterType = "Member">
+UPDATE memberlist SET member_Pass=#{memberPass}, member_Nick=#{memberNick}, member_Zipcode=#{memberZipcode},
+member_Address = #{memberAddress}, member_Address2 = #{memberAddress2}, member_Email=#{memberEmail}, member_Phone=#{memberPhone}
+WHERE member_Id=#{memberId}
+</update>
+
+<!-- 회원정보 삭제 -->
+<delete id = "deleteMember" parameterType="Member">
+DELETE FROM memberlist WHERE member_Id=#{memberId}
+</delete>
+
+<!-- 아이디 중복체크 맵핑 5월 27일 수정-->
+<select id = "idCheck" resultType = "boolean">
+SELECT COUNT(memberId) FROM memberlist WHERE member_Id = #{memberId}
+</select>
+
 <!-- 회원 정보를 추가하는 맵핑 구문 -->
 <insert id ="addMember" parameterType ="Member">
 INSERT INTO memberlist 
 VALUES(#{memberId}, #{memberPass}, 
-#{memberNick},#{memberAddress}, #{memberPoint}, 
+#{memberNick},#{memberZipcode},#{memberAddress},#{memberAddress2}, #{memberPoint}, 
 #{memberPhone}, #{memberEmail})
 </insert>
 
@@ -17,11 +47,14 @@ VALUES(#{memberId}, #{memberPass},
 SELECT * FROM memberlist WHERE member_Id = #{memberId}
 </select>
 
+
 <resultMap id="memberResultMap" type="Member">
 	    <id property="memberId" column="member_id"/>
 	    <result property="memberPass" column="member_pass"/>
 	    <result property="memberNick" column="member_nick"/>
+	    <result property="memberZipcode" column="member_zipcode"/>
 	    <result property="memberAddress" column="member_address"/>
+	    <result property="memberAddress2" column="member_address2"/>
 	    <result property="memberPoint" column="member_point"/>
 	    <result property="memberPhone" column="member_phone"/>
 	    <result property="memberEmail" column="member_email" />

@@ -4,6 +4,37 @@
 
 <mapper namespace="com.miniproject2.mapper.ItemMapper">
 
+<select id="getBidList" resultMap="itemResultMap" parameterType="ItemList">
+    SELECT i.*,
+    i.item_start_date <![CDATA[<]]> sysdate() started, 
+	i.item_end_date &lt; sysdate() finished
+    FROM bid_list bid
+    INNER JOIN ItemList i ON bid.fonky_item_num = i.item_num
+    WHERE bid.fonky_member_id = #{fonkyMemberId} AND bid.bid_Itr = 1
+</select>
+
+<select id="selectBidItr"  resultMap="BidResultMap" resultType="Bid">
+	select * from bid_list where fonky_item_num=#{itemNum} and fonky_member_id=#{memberId};
+</select>
+
+
+<!--  즐겨찾기를 클릭했을때 itr을 업데이트 -->
+<update id="updateBidItr" parameterType="map">
+   UPDATE bid_list
+SET bid_itr = #{bidItr}
+WHERE fonky_item_num = #{fonkyItemNum} AND fonky_member_id = #{fonkyMemberId};
+</update>
+
+<!-- 즐겨찾기를 클릭했을때 즐겨찾기 추가하는 메핑  -->
+<insert id="insertBid" parameterType="Bid"	useGeneratedKeys="true" keyProperty="bid_num">
+	  INSERT INTO bid_list (fonky_member_id, fonky_item_num) 
+    VALUES (#{fonkyMemberId}, #{fonkyItemNum})
+</insert>
+
+<!-- 즐겨찾기를 클릭했을때 즐겨찾기 삭제하는 메핑  -->
+<delete id="deleteBid" parameterType="Bid">
+	  delete from bid_list where fonky_member_id=#{memberId} and fonky_item_num=#{itemNum}
+</delete>
 
 	<!-- 리스트 뽑는 매퍼 -->
  <select id="itemList" resultMap="itemResultMap" resultType="ItemList" parameterType="hashmap">
@@ -30,8 +61,18 @@
 	</if>
 	</where>
 	ORDER BY
-	  ABS(DATEDIFF(sysdate(), i.item_start_date)),
-    i.item_start_date ASC LIMIT ${startRow},#{num}
+		    CASE
+        WHEN i.item_start_date <![CDATA[<]]> sysdate() AND i.item_end_date <![CDATA[>]]> sysdate() THEN 0
+        WHEN i.item_start_date <![CDATA[<]]> sysdate() THEN 1
+        ELSE 2
+    END,
+    CASE
+        WHEN i.item_start_date <![CDATA[<]]> sysdate() AND i.item_end_date <![CDATA[>]]> sysdate() THEN i.item_start_date
+        ELSE i.item_end_date
+    END,
+    i.item_start_date ASC
+	
+	 LIMIT ${startRow},#{num}
     </select>
     
 	<!-- 헤더에 추가할 리스트 뽑는 매퍼 -->
@@ -48,8 +89,16 @@ JOIN
 ON
     i.member_id = m.member_id
 ORDER BY
-    ABS(DATEDIFF(sysdate(), i.item_start_date)),
-    i.item_start_date ASC;
+  CASE
+        WHEN i.item_start_date <![CDATA[<]]> sysdate() AND i.item_end_date <![CDATA[>]]> sysdate() THEN 0
+        WHEN i.item_start_date <![CDATA[<]]> sysdate() THEN 1
+        ELSE 2
+    END,
+    CASE
+        WHEN i.item_start_date <![CDATA[<]]> sysdate() AND i.item_end_date <![CDATA[>]]> sysdate() THEN i.item_start_date
+        ELSE i.item_end_date
+    END,
+    i.item_start_date ASC
 
     </select>
     
@@ -109,6 +158,12 @@ ORDER BY
 	    <result property="memberId" column="member_id"/>
 	    <result property="started" column="started"/>
 	    <result property="finished" column="finished"/>
+	</resultMap>
+    <resultMap id="BidResultMap" type="Bid">
+	    <id property="bidNum" column="bid_num"/>
+	    <result property="fonkyMemberId" column="fonky_member_id"/>
+	    <result property="fonkyItemNum" column="fonky_item_num"/>
+	    <result property="bidItr" column="bid_itr"/>
 	</resultMap>
 	
 

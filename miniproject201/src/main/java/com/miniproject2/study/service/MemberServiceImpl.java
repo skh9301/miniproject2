@@ -47,16 +47,6 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.getMember(memberId);
 	}
 
-	//회원 가입시 아이디 중복을 체크하는 메서드
-	@Override
-	public boolean overlapIdCheck(String memberId) {
-		Member member = memberDao.getMember(memberId);
-		
-		if(member == null) {
-			return false;
-		}
-		return true;
-	}
 
 	//회원 정보를 DAO를 이용해 회원 테이블에 저장하는 메서드
 	@Override
@@ -64,5 +54,54 @@ public class MemberServiceImpl implements MemberService {
 		member.setMemberPass(passwordEncoder.encode(member.getMemberPass()));
 		memberDao.addMember(member);
 	}
+
+	// 회원 가입시 아이디 중복을 체크하는 메서드
+	@Override
+	public boolean idCheck(String memberId) {
+		
+		Member member = memberDao.getMember(memberId);
+		System.out.println("idCheck - member : "  + member);
+		if(member == null) {
+			return false;
+		}
+		return true;
+	}
+
+	//회원 정보 수정시에 기존 비밀번호가 맞는지 체크하는 메서드
+	@Override
+	public boolean memberPassCheck(String memberId, String memberPass) {
+		
+		String dbPass = memberDao.memberPassCheck(memberId, memberPass);
+		boolean result = false;
+		
+		if(passwordEncoder.matches(memberPass, dbPass)) {
+			result = true;
+		}
+		
+		return result;
+	}
+
+	//회원 정보를 DAO를 이용해 회원 테이블에서 수정하는 메서드
+	@Override
+	public void updateMember(Member member) {
+		
+		member.setMemberPass(passwordEncoder.encode(member.getMemberPass()));
+		System.out.println(member.getMemberPass());
+		
+		memberDao.updateMember(member);
+	}
+
+	//회원정보를 DAO를 이용해 회원테이블에서 삭제하는 메서드
+	@Override
+	public void deleteMember(Member member) {
+
+		memberDao.deleteMember(member);
+	}
+
+	@Override
+	public void deDuctionPoint(Member member) {
+		memberDao.deDuctionPoint(member);
+	}
+	
 
 }

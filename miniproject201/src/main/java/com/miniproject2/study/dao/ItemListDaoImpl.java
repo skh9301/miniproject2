@@ -20,7 +20,10 @@ public class ItemListDaoImpl implements ItemListDao{
 	
 	private final String NAME_SPACE="com.miniproject2.mapper.ItemMapper";
 
-
+	//즐겨찾기한 리스트만 뽑기
+		public List<ItemList> getBidList(String fonkyMemberId){
+			return sqlSession.selectList(NAME_SPACE+".getBidList",fonkyMemberId);
+		}
 	
 	@Override
 	public List<ItemList> itemList(int startRow,int num,String type, String keyword) {
@@ -84,6 +87,7 @@ public class ItemListDaoImpl implements ItemListDao{
 	public List<ItemList> itemList() {
 		return sqlSession.selectList(NAME_SPACE+".itemListH"); 
 	}
+	
 
 
 

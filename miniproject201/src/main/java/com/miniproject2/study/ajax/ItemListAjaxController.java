@@ -64,14 +64,19 @@ public class ItemListAjaxController {
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("started", started);
-		System.out.println(started);
 		resultMap.put("finished", finished);
 		resultMap.put("days", days);
 		resultMap.put("hours", hours);		
 		resultMap.put("minutes", minutes);
 		resultMap.put("seconds", seconds);
 		resultMap.put("aList", aList);
-		
+		if (aList == null || aList.isEmpty()) {
+		    resultMap.put("aRegPrice", 0); // 또는 다른 기본값
+		    resultMap.put("aMemberId", null); // 또는 다른 기본값
+		} else {
+		    resultMap.put("aRegPrice", aList.get(0).getRegPrice());
+		    resultMap.put("aMemberId", aList.get(0).getMemberId());
+		}
 		return resultMap;
 	}
 	
@@ -82,6 +87,7 @@ public class ItemListAjaxController {
 		auction.setItemNum(itemNum);
 		auction.setMemberId(memberId);
 		auction.setRegPrice(regPrice);
+		
 		auctionService.insertAuction(auction);
 		
 		return "success";

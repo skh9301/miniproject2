@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,9 +30,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.miniproject2.study.domain.Auction;
+import com.miniproject2.study.domain.Bid;
 import com.miniproject2.study.domain.ItemList;
 import com.miniproject2.study.domain.Member;
 import com.miniproject2.study.service.AuctionService;
+import com.miniproject2.study.service.BidService;
 import com.miniproject2.study.service.ItemListService;
 
 @Controller
@@ -40,6 +43,9 @@ public class ItemListController {
 	private ItemListService itemService;
 	@Autowired
 	private AuctionService auctionService;
+	
+	@Autowired
+	private  BidService bidService;
 	//@Autowired
 	//private MemberService memberService;
 	
@@ -62,6 +68,17 @@ public class ItemListController {
 		  model.addAllAttributes(modelMap);
 		  model.addAttribute("itemNum",iList.get(0).getItemNum());
 		  return "itemList"; 
+	  }
+	  // 아이템게시판 메핑
+	  @RequestMapping(value={"/bidListForm"},method=RequestMethod.GET) 
+	  public String itemList(Model model,HttpSession session){ 
+		  String fonkyMemberId = (String) session.getAttribute("fonkyMemberId");
+		  
+		 List<ItemList> bidList= itemService.getBidList( fonkyMemberId);
+		 model.addAttribute("bidList",bidList);
+		 List<ItemList> iList= itemService.itemList();
+			model.addAttribute("itemNum",iList.get(0).getItemNum());
+		  return "bidListForm"; 
 	  }
 	
 	
@@ -138,10 +155,10 @@ public class ItemListController {
 	 //아이템게시판 상세페이지
 	 
 	 @RequestMapping("/itemDetail") 
-	 public String itemDetail(Model model,String itemNum) {
+	 public String itemDetail(Model model,String itemNum,HttpSession session) {
 		 ItemList iList = itemService.getList(itemNum);
+		 session.setAttribute ("itemNum",iList.getItemNum());
 	  model.addAttribute("itemList",iList);
-	  model.addAttribute("itemNum",iList.getItemNum());
 	  return "itemDetail";
 	  }
 	  
@@ -182,6 +199,7 @@ public class ItemListController {
 	 public String exChange(Model model,String itemNum, Auction auction, @RequestParam(value="pageNum",required=false, defaultValue="1")int pageNum) {
 		 Map<String,Object> modelMap = itemService.itemList(pageNum);
 		 ItemList item = itemService.getList(itemNum);
+		 System.out.println(itemNum);
 		 List<Auction> aList =auctionService.getAuction(itemNum);
 		 //물품 리스트 -> 오른쪽 출력
 		 model.addAllAttributes(modelMap);

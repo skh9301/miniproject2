@@ -5,12 +5,11 @@
 	$(function() {
 		// 아이템 번호를 자바스크립트 변수에 저장
 		let itemNum = "${item.itemNum}"
-
+		
 		let timer = setInterval(
 				function() {
 
-					$
-							.ajax({
+					$.ajax({
 								url : "auctionTime",
 								type : "post",
 								data : {
@@ -18,14 +17,35 @@
 								},
 								dataType : "json",
 								success : function(resData) {
-									console.log(resData.started);
+									console.log(itemNum)
 									if (resData.finished) {
 										clearInterval(timer);
+										var memberId = $("#memberId").val();
+				                        var aMemberId = resData.aMemberId;  
+				                        if (aMemberId === memberId) {
+				                            var memberPoint = $("#memberPoint").val();
+				                            memberPoint = memberPoint - resData.aRegPrice;
+				                            $.ajax({
+				                                url: "deDuctionPoint",
+				                                type: "post",
+				                                data: {
+				                                    memberPoint: memberPoint,
+				                                    memberId: memberId
+				                                },
+				                                dataType: "json",
+				                                success: function(resData) {
+				                                    
+				                                },
+				                                error: function() {
+				                                    console.log("error");
+				                                }
+				                            });
+											
+										}
 										alert('경매가 종료되었습니다.');
 										location.href = "itemList";
 										return;
 									}
-
 									let result = "<h2 class='text-center'>&nbsp;";
 									if (resData.days > 0) {
 										result += resData.days + "일 ";
@@ -43,15 +63,14 @@
 
 									$("#actionTime").html(result);
 
-									let result1 = '<table class="table table-hover border border-end-0 border-start-0">'
+									let result1 = '<table class="table border border-end-0 border-start-0">'
 											+ '<tbody>'
 											+ '<tr>'
 											+ '<th>입찰번호</th>'
 											+ '<th>입찰자</th>'
 											+ '<th>입찰가격</th>' + '</tr>';
 
-									if (resData.aList == null
-											|| resData.aList.length === 0) {
+									if (resData.aList == null	|| resData.aList.length == 0) {
 										result1 += '<tr>'
 												+ '<td class="text-center" colspan="3">입찰자가 없습니다</td>'
 												+ '</tr>';
@@ -75,7 +94,7 @@
 									console.log("error");
 								}
 							});
-				}, 1000);
+				}, 500);
 
 	});
 </script>
@@ -86,11 +105,9 @@
 </div>
 <div class="row my-5 text-center border  ">
 	<form id="addAuction" action="exChange" method="post">
-		<input type="hidden" id="itemNum" name="itemNum"
-			value="${item.itemNum }"> <input type="hidden"
-			name="memberId" id="memberId"
-			value="${sessionScope.member.memberId }"> <input
-			type="hidden" id="regPrice" name="regPrice" value="${regPrice }">
+		<input type="hidden" id="itemNum" name="itemNum" 	value="${item.itemNum }"> 
+		<input type="hidden"	name="memberId" id="memberId" value="${sessionScope.member.memberId }"> 
+		<input	type="hidden" id="regPrice" name="regPrice" value="${regPrice }">
 	</form>
 	<div class="col">
 		<!-- 이미지  -->
@@ -169,7 +186,7 @@
 							<span class="input-group-text" style="width: 130px;">남은
 								포인트 :</span> <input type="text" class="form-control"
 								aria-label="Amount (to the nearest dollar)" id="memberPoint"
-								value="${sessionScope.member.memberPoint }" readonly> <span
+								value="${sessionScope.memberPoint==null ? sessionScope.member.memberPoint : sessionScope.memberPoint}" readonly> <span
 								class="input-group-text">point</span>
 						</div>
 					</div>
@@ -180,7 +197,6 @@
 							<span class="input-group-text" id="price" style="width: 130px;">매수가격(KRW)</span>
 							<input type="text" class="form-control"
 								aria-label="Recipient's username with two button addons"
-								value="${regPrice==null ? item.itemPrice : item.itemPrice>regPrice? item.itemPrice : regPrice}"
 								id="aPrice" name="aPrice">
 							<button class="btn btn-outline-secondary" type="button" id="plus">+</button>
 						</div>
@@ -197,7 +213,7 @@
 						</c:if>
 						<!-- 경매가 시작되고 종료되지 않았으면 경매참여 버튼 활성화 -->
 						<c:if test="${item.started and not item.finished}">
-							<input type="button" class="btn btn-primary" style="width: 240px;" value="경매참여" id="buyBtn"></a>
+							<input type="button" class="btn btn-primary" style="width: 240px;" value="매 수" id="buyBtn">
 						</c:if>
 						<!-- 경매가 종료되었으면 -->
 						<c:if test="${item.finished}">

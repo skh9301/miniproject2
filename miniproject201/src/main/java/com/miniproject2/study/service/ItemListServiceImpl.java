@@ -119,5 +119,9 @@ public class ItemListServiceImpl implements ItemListService{
 	public List<ItemList> itemList() {
 		return itemListDao.itemList();
 	}
+	@Override
+	public List<ItemList> getBidList( String fonkyMemberId) {
+		return itemListDao.getBidList( fonkyMemberId);
+	}
 
 }

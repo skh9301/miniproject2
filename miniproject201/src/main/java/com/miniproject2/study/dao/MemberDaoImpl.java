@@ -22,6 +22,7 @@ public class MemberDaoImpl implements MemberDao{
 	public void addMember(Member member) {
 		sqlSession.insert(NAME_SPACE+ ".addMember", member);
 	}
+	
 	//memberlist테이블에서 memberId에 해당하는 회원 정보를 읽어오는 메서드 반환하는 메서드
 	@Override
 	public Member getMember(String memberId) {
@@ -29,6 +30,29 @@ public class MemberDaoImpl implements MemberDao{
 		return sqlSession.selectOne(NAME_SPACE + ".getMember", memberId);
 	}
 	
+	//회원 정보를 DAO를 이용해 회원테이블에서 수정하는 메서드
+	@Override
+	public void updateMember(Member member) {
+		sqlSession.update(NAME_SPACE + ".updateMember", member);
+	}
+	
 
+	//회원 정보 수정시에 기존 비밀번호가 맞는지 체크하는 메서드
+	@Override
+	public String memberPassCheck(String memberId, String memberPass) {
+		return sqlSession.selectOne(NAME_SPACE + ".memberPassCheck", memberId);
+		
+	}
 
+	//회원 정보를 DAO를 이용해 회원테이블에서 삭제하는 메서드
+	@Override
+	public void deleteMember(Member member) {
+		sqlSession.delete(NAME_SPACE  + ".deleteMember", member);
+	}
+	
+	@Override
+	public void deDuctionPoint(Member member) {
+		sqlSession.delete(NAME_SPACE+".deDuctionPoint",member);
+	}
+		
 }

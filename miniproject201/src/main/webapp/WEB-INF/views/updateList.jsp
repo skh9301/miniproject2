@@ -40,7 +40,7 @@
 				<div class="col">
 					<div class="input-group" style="height: 40px;">
 						<span class="input-group-text" style="width: 90px;">시작 날짜</span>
-						<input type="date" id="startDate" class="form-control"
+						<input type="datetime-local" id="startDate" class="form-control"
 							name="itemStartDate">
 					</div>
 				</div>
@@ -49,7 +49,7 @@
 				<div class="col">
 					<div class="input-group" style="height: 40px;">
 						<span class="input-group-text" style="width: 90px;">종료 날짜</span>
-						<input type="date" id="endDate" class="form-control"
+						<input type="datetime-local" id="endDate" class="form-control"
 							name="itemEndDate">
 					</div>
 				</div>

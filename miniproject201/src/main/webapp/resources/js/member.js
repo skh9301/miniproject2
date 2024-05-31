@@ -1,74 +1,108 @@
 $(function(){
-	
-	$("#joinForm").submit(function(){
-		var pass1 = $("#pass1").val();
-		var pass2 = $("#pass2").val();
-		var id = $("#memberId").val();
-		var name = $("#memberNice").val();
+
+	//5월 27일 수정
+	$("#joinForm").on("submit",function(){
+		var pass1 = $("#LogPass1").val();
+		var pass2 = $("#LogPass2").val();
+		var id = $("#LogMemberId").val();
+		var name = $("#LogMemberNick").val();
 		var phone = $("#phone1").val();
+		var zipcode = $("#memberZipcod").val();
+		var address1 = $("#memberAddress").val();
+		var address2 = $("#memberAddress2").val();
+		var email =$("#emailId").val();
+		var address = $("#address2").val();
 		
-		
-		if(phone.length > 0 && phone.length != 11){
+			if(phone.length > 0 && phone.length != 11){
 			console.log(phone.length);
 			alert("휴대폰 번호 11자리를 입력해주세요");
 			$("#phone1").focus();
 			return false
 		}
-		
-		if(pass1!=pass2){
-			alert("두 비밀번호가 같지가 않습니다.");
-			$("#pass2").focus();
-			return false
-		}
-		
 		if(id.length<=0){
 			alert("아이디가 입력되지 않았습니다.");
-			$("#pass2").focus();
-			return false
-		}
-		if(pass1.length<=0){
-			alert("비밀번호가 입력되지 않았습니다.");
-			$("#pass1").focus();
+			$("#LogMemberId").focus();
 			return false
 		}
 		if(name.length<=0){
 			alert("닉네임이 입력되지 않았습니다.");
-			$("#memberNice").focus();
+			$("#LogMemberNick").focus();
 			return false
 		}
-	
+		if(pass1.length<=0){
+			alert("비밀번호가 입력되지 않았습니다.");
+			$("#LogPass1").focus();
+			return false
+		}
+		if($("#zipcode").val().length <=0){
+		alert("주소가 입력되지 않았습니다.")
+		$("#zipcode").focus();
 		return false
+		}
+		if(address2.length <= 0){
+		alert("상세주소를 입력해 주세요.")
+		$("#address").focus();
+		return false
+		}
+		if(email.length <=0){
+		alert("이메일이 입력되지 않았습니다.\n이메일을 입력해 주세요.")
+		$("#emailId").focus();
+		return false
+		}
+		return false
+		
 	});
-
-	//아이디
-	$("#memberId").on("keyup", function() {
+	
+	//아이디 중복확인 
+	$("#LogMemberId").on("keyup", function() {
 
 		var regExp = /[^A-Za-z0-9]/gi;
-		
-		var id = $("#memberId").val();
-		url="overlapIdCheck?id=" + id;
 	
 		if(regExp.test($(this).val())) {
 			$("#oId").css("color", "red").text("영문 대소문자, 숫자만 입력할 수 있습니다.");
-		return false;
+			$(this).val($(this).val().replace(regExp, ""));
+			return false;
 		}
 		
-		if(id.length == 0) {
-		$("#oId").css("color", "red").text("아이디를 입력해주세요");
-		return false;
+		if($(this).val().length == 0) {
+			$("#oId").css("color", "red").text("아이디를 입력해주세요");
+			return false;
 		}
 		
-		if(id.length < 5) {
+		if($(this).val().length < 5) {
 			$("#oId").css("color", "red").text("아이디는 5자 이상 입력해주세요.");
+			return false;
 		}else{
 			$("#oId").text("");
 		}
-		return false;
-	
-	}); 	
+		
+		$.ajax({
+			url : "idCheck.ajax",			
+			type : "post",			
+			data : {memberId : $(this).val()},			
+			dataType : "json",			
+			success : function(data){
+				// {"result": "true"} 또는 {"result" : "false"}
+				console.log(data);
+				
+				if(! data.result) {
+					$("#oId").css("color", "blue").text("사용 가능한 아이디 입니다.");
+					
+				} else {
+					$("#oId").css("color", "red").text("사용할 수 없는 아이디 입니다.");
+				}
+				
+			},	//end success		
+			error : function(xhr, status, error){
+				console("error : " + xhr.statusText + ", " + status + ", " + error);
+			}
+		});// end ajax
+		
+	});	
+		
 	
 	// 비밀번호
-	$("#pass1").on("keyup", function() {
+	$("#LogPass1").on("keyup", function() {
 
 		var regExp = /[^A-Za-z0-9!@#$%^&*]/gi;
 		
@@ -93,44 +127,32 @@ $(function(){
 	
 	}); 	
 	
-	// 비밀번호
-	$("#pass2").on("keyup", function() {
+	// 비밀번호2
+	$("#LogPass2").on("keyup", function() {
 
 		var regExp = /[^A-Za-z0-9!@#$%^&*]/gi;
 		
-		var pass2 = $("#pass2").val();
+		var pass1 = $("#LogPass1").val();
+		var pass2 = $("#LogPass2").val();
 	
-		if(regExp.test($(this).val())) {
-			$("#oPass2").css("color", "red").text("영문 대소문자, 숫자 !~*까지만 입력할 수 있습니다.");
-		return false;
-		}
-		
-		if(pass2.length == 0) {
-		$("#oPass2").css("color", "red").text("비밀번호를 입력해주세요");
-		return false;
-		}
-		
-		if(pass2.length < 8) {
-			$("#oPass2").css("color", "red").text("비밀번호는 8자 이상 입력해주세요.");
+		if(pass1 != pass2){
+		$("#oPass2").css("color", "red").text("비밀번호가 같지 않습니다.");
 		}else{
-			$("#oPass2").text("");
+		$("#oPass2").text("");
 		}
-		
-		
 		return false;
-	
 	}); 	
 	
 	// 닉네임
-	$("#memberNick").on("keyup", function() {
+	$("#LogMemberNick").on("keyup", function() {
 
 		
-		var name = $("#memberNick").val();
+		var name = $("#LogMemberNick").val();
 	
 		
 		if(name.length == 0) {
-		$("#oNick").css("color", "red").text("닉네임를 입력해주세요");
-		return false;
+			$("#oNick").css("color", "red").text("닉네임를 입력해주세요");
+			return false;
 		}
 		
 		if(name.length < 3) {
@@ -140,63 +162,158 @@ $(function(){
 		}
 		return false;
 	
-	}); 	
-	
-	//아이디 중복검사
-	$("#memberId").on("keyup", function() {
-		
-		var id = $(this).val();
-		
-		if(id.length < 5) {
-			return false;
-		}
-		// document.joinForm.id.value = id;
-		// document.joinForm.isIdCheck.value = true;
-		
-		// $.ajax() 이용해서 서버에서 
-		// ajax() 함수의 success 의 콞백 함수 안에서 
-		// $("#label1").css("color", "red").text("사용하실 수 있는 아이디 입니다.");  
-		
-		$.ajax({			
-			url: "overlapIdcheck.ajax",
-			
-			type: "post",
-			
-			data : { recommend: com, no : $("#no").val()},
-
-		
-			dataType: "json",
-			success: function(data) {	
-			 
-						
-			},
-			error: function(xhr, status, error) {
-				alert("error : " + xhr.statusText + ", " + status + ", " + error);
-			}
-		});
 	});
+	
+
+	
 	
 	// 회원 로그인 폼이 submit 될 때 폼 유효성 검사를 위한 이벤트 처리
 	$("#loginForm").submit(function() {
 		var id = $("#userId").val();
 		var pass = $("#userPass").val();
+		
 		if(id.length <= 0) {
-		alert("아이디가 입력되지 않았습니다.\n아이디를 입력해주세요");
-		$("#userId").focus();
-		return false;
+			alert("아이디가 입력되지 않았습니다.\n아이디를 입력해주세요");
+			$("#userId").focus();
+			return false;
 		}
 		if(pass.length <= 0) {
-		alert("비밀번호가 입력되지 않았습니다.\n비밀번호를 입력해주세요");
-		$("#userPass").focus();
-		return false;
+			alert("비밀번호가 입력되지 않았습니다.\n비밀번호를 입력해주세요");
+			$("#userPass").focus();
+			return false;
 		}
 	});
-});
+	
+	//회원 정보 수정 폼에서 비밀번호 확인을 입력했을 때 이벤트 처리
+	//회원정보 수정폼에서 기존 비밀번호가 맞는지를 Ajax통신을 통해 확인
+	$("#oldmemberPass").on("keyup", function(){
+	
+		var oldId = $("#memberId").val();
+		var oldPass = $("#oldmemberPass").val();
+		var oldPass2 = $("#pass1").val();
+	
+		if($.trim(oldPass).length == 0){
+			$("#oPassCheck").css("color", "red").text("기존 비밀번호를 입력해주세요.");
+			return false;
+		}
+		
+		
+		
+		var data = "memberId=" + oldId + "&memberPass=" + oldPass;
+		console.log("data : " + data);
+		
+		$.ajax({
+			"url" : "passCheck.ajax",
+			"type" : "get",
+			"data" : data,
+			"dataType" : "json",
+			"success" : function(resData){
+				if(resData.result){
+					$("#oPassCheck").css("color", "blue").text("비밀번호가 확인되었습니다.");
+					$("#oldmemberPass").attr("disabled", true);
+					$("#oldmemberPass").attr("readonly", true);
+					$("pass1").focus();
+				}else{
+					$("#oPassCheck").css("color", "red").text("비밀번호를 다시 확인해주세요");
+				}
+			},
+			"error": function() {
+				console.log("error");
+			}
+		
+		});// end ajax 
+	
+	}); //$("#oldmemberPass")
+	
+
+	//회원정보 수정 폼에서 수정하기 버튼이 클릭되면 유효성 검사를 하는 함수
+	$("#memberUpdateForm").on("submit", function(){
+	
+	var oldPass = $("#oldmemberPass").val();
+		var oldPass2 = $("#pass1").val();
+	
+	if(! $("#oldmemberPass").attr("disabled")){
+		alert("기존 비밀번호를 확인해주세요.")
+		return false;
+	}
+	
+	if(oldPass == oldPass2){
+		$("#oPassCheck2").css("color", "red").text("기존 비밀번호와 다르게 입력해주세요.");
+		return false;
+	}
+	if(oldPass2.length == 0){
+		$("#oPassCheck2").css("color", "red").text("비밀번호를 입력해 주세요.");
+		return false;
+	}
+	
+		return joinFormCheck();
+	}); // end 수정버튼
+	
+	//회원 탈퇴 폼에서 탈퇴하기 버튼이 클릭되면 	
+	$("#memberDeleteForm").on("submit", function(){
+	
+	var oldPass = $("#oldmemberPass").val();
+	
+		if(oldPass2.length == 0){
+		$("#oPassCheck").css("color", "red").text("기존 비밀번호를 입력해 주세요.");
+		return false;
+		
+	
+	}
+	
+		return joinFormCheck();
+	
+	});//memberDeletForm
+
+	// 비밀번호2
+	$("#pass1").on("keyup", function(){
+	
+		var oldPass2 = $("#pass1").val();
+		
+		if(oldPass2.length < 8){
+			$("#oPassCheck2").css("color", "red").text("비밀번호는 8자 이상입니다.");
+		}else{
+		$("#oPassCheck2").text("");
+		}
+		
+		
+	
+	}); //end oldPassCheck2
+	
+	
+		// 이메일 입력 셀렉트 박스에서 선택된 도메인을 설정하는 함수 
+	$("#selectDomain").on("change", function() {
+		var str = $(this).val();
+		
+		if(str == "직접입력") {	
+			$("#emailDomain").val("");
+			$("#emailDomain").prop("readonly", false);
+		} else if(str == "네이버"){	
+			$("#emailDomain").val("naver.com");			
+			$("#emailDomain").prop("readonly", true);
+			
+		} else if(str == "다음") {		
+			$("#emailDomain").val("daum.net");
+			$("#emailDomain").prop("readonly", true);
+			
+		} else if(str == "한메일"){	
+			$("#emailDomain").val("hanmail.net");
+			$("#emailDomain").prop("readonly", true);
+			
+		} else if(str == "구글") {		
+			$("#emailDomain").val("gmail.com");
+			$("#emailDomain").prop("readonly", true);
+		}
+	});
+		
+	
+}); // end $(function());
 
 
 
 
-function findZipcode() {
+ //주소
+function findZipcode(){ 
 	new daum.Postcode({
         oncomplete: function(data) {
             // 우편번호 검색 결과 항목을 클릭했을때 실행할 코드를 여기에 작성한다.
@@ -233,7 +350,7 @@ function findZipcode() {
 			$("#address1").val(addr);
 			
 			// 커서를 상세주소 입력상자로 이동한다.
-			$("#address2").focus();
+			$("#memberAddress2").focus();
        	}
 	}).open();
 }
