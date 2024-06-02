@@ -126,18 +126,6 @@ public class MemberController {
 		member.setMemberPass(pass1);
 		member.setMemberEmail(emailId + "@" + emailDomain);
 		member.setMemberPhone(memberPhone);
-//		 if (memberPhone != null && memberPhone.length() == 11) {
-//		        String formattedPhone = memberPhone.substring(0, 3) + "-" +
-//		                                memberPhone.substring(3, 7) + "-" +
-//		                                memberPhone.substring(7);
-//		     
-//		        member.setMemberPhone(formattedPhone);
-//		    } else {
-//		        // 휴대폰 번호가 유효하지 않은 경우의 처리
-//		        member.setMemberPhone(memberPhone); // 기본적으로 입력된 형식 그대로 저장
-//		    }
-		 
-		 //MemberService를 통해서 회원 수정 폼에서 들어온 데이터를 DB에서 수정한다.
 		 memberService.updateMember(member);
 		 model.addAttribute("member", member);
 		 

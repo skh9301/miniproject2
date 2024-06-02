@@ -59,26 +59,20 @@ public class AjaxProcessController {
 		
 	
 		Bid bid1 = bidService.selectBid(fonkyItemNum, fonkyMemberId);
-		System.out.println("첫번째 셀렉" + bid1);
 	    if (bid1 == null) {
 	        bidService.insertBid(bid);
-	        System.out.println(fonkyItemNum);
-			System.out.println(fonkyMemberId);
 	        bid1 = bidService.selectBid(fonkyItemNum, fonkyMemberId); // 새로운 즐겨찾기 추가 후 다시 조회
 	    }
 
-		System.out.println(bid1.getBidItr());
 	    String bidItr = bid1.getBidItr();
 	    int bidItrValue = Integer.parseInt(bidItr); // 문자열을 숫자로 변환
 	    
 	    if (bidItrValue == 0) {
 	        bidItr = "1"; // 문자열 "1"로 설정
-	        System.out.println("두번째부분" + bidItr);
 	        bidService.updateBidItr(bidItr, fonkyItemNum, fonkyMemberId);
 	        response.put("message", "즐겨찾기가 추가되었습니다.");
 	    } else {
 	        bidItr = "0"; // 문자열 "0"로 설정
-	        System.out.println("세번째부분" + bidItr);
 	        bidService.updateBidItr(bidItr, fonkyItemNum, fonkyMemberId);
 	        response.put("message", "즐겨찾기가 삭제되었습니다.");
 	    }

@@ -69,7 +69,7 @@ public class ItemListController {
 		  model.addAttribute("itemNum",iList.get(0).getItemNum());
 		  return "itemList"; 
 	  }
-	  // 아이템게시판 메핑
+	  // 즐겨찾기한리스트
 	  @RequestMapping(value={"/bidListForm"},method=RequestMethod.GET) 
 	  public String itemList(Model model,HttpSession session){ 
 		  String fonkyMemberId = (String) session.getAttribute("fonkyMemberId");
